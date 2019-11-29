@@ -139,7 +139,7 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("user/login", this.loginForm)
-            .then(res => {
+            .then(() => {
               this.$router.push({ path: "/home" }); //登录成功之后重定向到首页
               this.loading = false;
             })
@@ -148,7 +148,7 @@ export default {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
+          alert("error submit!!");
           return false;
         }
       });

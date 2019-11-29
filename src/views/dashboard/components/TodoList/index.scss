@@ -1,0 +1,205 @@
+.todoapp {
+  min-width: 15rem;
+  max-width: 35rem;
+  margin:0 auto 2rem;
+  font: 1rem "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  z-index: 1;
+  position: relative;
+  background: #fff;
+
+  .new-todo {
+    position: relative;
+    margin: 0;
+    padding: 0.5rem 1rem 1rem 4rem;
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    border: none;
+    box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.005);
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+  }
+
+  .main {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid #e6e6e6;
+  }
+
+  .toggle-all {
+    opacity: 0;
+    position: absolute;
+  }
+  .toggle-all + label {
+    width: 3.1rem;
+    height: 2.8rem;
+    position: absolute;
+    top: -3.1rem;
+    left: -0.2rem;
+    transform: rotate(90deg);
+  }
+  .toggle-all + label::before {
+    content: "❯";
+    color: #e6e6e6;
+    font-size: 1.5rem;
+    padding: 0;
+  }
+  .toggle-all:checked + label:before {
+    color: #737373;
+  }
+  .todo-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .todo {
+      position: relative;
+      height: 3rem;
+      padding: 0;
+      padding-left: 0.5rem;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #ededed;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      /deep/ .view {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      /deep/.toggle {
+        position: absolute;
+        opacity: 0;
+        box-sizing: border-box;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin: 0;
+        outline: none;
+        /* Mobile Safari */
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      /deep/.edit {
+        display: none;
+        position: absolute;
+        top:0;
+        left:0;
+        margin:0;
+        padding: .5rem;
+        box-sizing: border-box;
+        width: 100%;
+        height:2.5rem;
+        font-size: 1.2rem;
+        border: 1px solid #999;
+        box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+        
+      }
+    }
+  }
+
+  /deep/.toggle + label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    padding-left: 3rem;
+    background-image: url("../../../../icons/check-none.png");
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 2rem;
+    transition: color 0.4s;
+  }
+  /deep/.toggle:checked + label {
+    background-image: url("../../../../icons/check-done.png");
+    background-size: 2rem;
+    color: #d9d9d9;
+    text-decoration: line-through;
+  }
+  /deep/.destroy {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0.5rem;
+    box-sizing: border-box;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: #cc9a9a;
+    font-size: 2rem;
+
+    &:hover {
+      color: #af5b5e;
+    }
+    &::after {
+      content: "×";
+    }
+  }
+  /deep/.todo:hover .destroy {
+    display: block;
+  }
+  /deep/.todo.editing .edit {
+    display: block;
+  }
+  .footer {
+    color: #777;
+    position: relative;
+    padding: .5rem 1rem;
+    box-sizing: border-box;
+    height: 2.5rem;
+    text-align: center;
+    border-top: 1px solid #e6e6e6;
+    display: flex;
+    justify-content:start;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6, 0 17px 2px -6px rgba(0, 0, 0, 0.2);
+  }
+  .todo-count {
+    margin-right: 2rem;
+  }
+  .todo-count strong {
+    font-weight: 300;
+  }
+  .filters {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .filters li {
+    display: inline;
+  }
+  .filters li a {
+    font-size: .75rem;
+    padding: .2rem .5rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: .2rem;
+  }
+  .filters li a:hover {
+    border-color: rgba(175, 47, 47, 0.1);
+  }
+  .filters li a.selected {
+    border-color: rgba(175, 47, 47, 0.2);
+  }
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    .toggle-all,
+    .todo-list li .toggle {
+      background: none;
+    }
+    .todo-list li .toggle {
+      height: 2.5rem;
+    }
+  }
+  @media (max-width: 430px) {
+    .footer {
+      height: 50px;
+    }
+    .filters {
+      bottom: 10px;
+    }
+  }
+}
