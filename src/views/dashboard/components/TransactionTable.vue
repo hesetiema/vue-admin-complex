@@ -22,7 +22,6 @@
 
 <script>
 import { transactionList } from "@/api/remote-search";
-import mock from "../../../../mock/index.js";
 
 export default {
   filters: {

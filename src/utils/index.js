@@ -140,7 +140,7 @@ export function cleanArray(actual) {
 
 /**
  * @param {Object} json
- * @returns {Array}
+ * @returns {String}
  */
 export function param(json) {
   if (!json) return ''

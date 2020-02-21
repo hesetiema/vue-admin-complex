@@ -4,7 +4,7 @@
     <div class="box-card-body">
       <tab-thumb :image="avatar" class="tabThumb" />
       <meffect class="meffect-text" text="vue-cli-crash" />
-      <div class="progress-item f-item" >
+      <div class="progress-item f-item">
         <span>Vue</span>
         <el-progress :percentage="70" />
       </div>
@@ -26,27 +26,16 @@
 
 <script>
 import TabThumb from "@/components/TabThumb";
-import Meffect from '@/components/TextHoverEffect/Meffect'
+import Meffect from "@/components/TextHoverEffect/Meffect";
 import { mapGetters } from "vuex";
-import mock from "../../../../mock/index.js";
 
 export default {
   components: {
     TabThumb,
     Meffect
   },
-  mounted() {
-    this.$store
-      .dispatch("user/getInfo")
-      .then(res => {
-        this.avatar = res.avatar;
-      })
-      .catch(err => {
-        alert(err);
-      });
-  },
   computed: {
-    ...mapGetters(["avatar"])
+    ...mapGetters(["name", "avatar", "roles"])
   }
 };
 </script>
@@ -68,7 +57,7 @@ export default {
       filter: contrast(130%);
     }
   }
-  .box-card-body{
+  .box-card-body {
     position: relative;
   }
   .tabThumb {
@@ -82,7 +71,7 @@ export default {
     border: 0.375rem solid #fff;
     background-color: #fff;
   }
-  .f-item{
+  .f-item {
     padding-top: 2rem;
   }
   .progress-item {

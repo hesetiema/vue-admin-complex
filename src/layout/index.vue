@@ -30,7 +30,6 @@ export default {
     Settings,
     TagsView,
     Sidebar,
-    
   },
   mixins: [ResizeMixin],
   computed: {

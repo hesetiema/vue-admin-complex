@@ -5,52 +5,31 @@ Vue.use(Router)
 
 import Layout from '@/layout'
 
-import componentsRouter from './modules/components'
-import nestedRouter from './modules/nested'
-
 export const constantRoutes=[
   {
-    path: '/',
-    redirect: '/login',
-    hidden:true
-  },
-  {
     path: '/login',
-    name: 'login',
+    name: 'Login',
     hidden:true,
-    component: () => import('@/views/login')
+    component: () => import('@/views/login/index')
   },
   {
-    path: '/home',
-    name: 'home',
+    path: '/',
     component:Layout,
-    redirect:'/home/dashboard',
+    redirect:'/dashboard',
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        name: 'dashboard',
+        name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
       }
     ]
   },
   {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
     path: '/404',
-    name: '404',
+    name: '404page',
     hidden:true,
-    component: () => import('@/views/404')
+    component: () => import('@/views/error-page/404')
   },
 ]
 
@@ -59,8 +38,6 @@ export const constantRoutes=[
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  componentsRouter,
-  nestedRouter,
   {
     path: 'external-link',
     component: Layout,
@@ -68,6 +45,24 @@ export const asyncRoutes = [
       {
         path: 'https://github.com/PanJiaChen/vue-element-admin',
         meta: { title: 'External Link', icon: 'link',roles:'admin' }
+      }
+    ]
+  },
+  {
+    path: '/error',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'ErrorPages',
+    meta: {
+      title: 'Error Pages',
+      icon: '404'
+    },
+    children: [
+      {
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: 'Page404',
+        meta: { title: '404', noCache: true }
       }
     ]
   },
