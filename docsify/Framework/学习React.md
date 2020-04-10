@@ -6,7 +6,7 @@ React 是一个声明式，高效且灵活的用于构建用户界面的 JavaScr
 
 ### 1、外部引入
 
-```js
+```javascript
 //部署时，将 "development.js" 替换为 "production.min.js"
 <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
@@ -36,12 +36,12 @@ JSX 是 JavaScript 的语法扩展，描述 UI 呈现出它应有交互的本质
 
 - 使用点语法：在一个模块中导出许多 React 组件时，使用点语法来引用
 
-```js
+```javascript
 import React from "react";
 const MyComponents = {
   DatePicker: function DatePicker(props) {
     return <div>Imagine a {props.color} datepicker here.</div>;
-  }
+  },
 };
 function BlueDatePicker() {
   return <MyComponents.DatePicker color="blue" />;
@@ -50,13 +50,13 @@ function BlueDatePicker() {
 
 - 运行时选择类型：通过通用表达式来（动态）决定元素类型，需将类型赋值给一个大写字母开头的变量。根据 prop 来渲染不同组件：
 
-```js
+```javascript
 import React from "react";
 import { PhotoStory, VideoStory } from "./stories";
 
 const components = {
   photo: PhotoStory,
-  video: VideoStory
+  video: VideoStory,
 };
 
 function Story(props) {
@@ -74,8 +74,8 @@ function Story(props) {
 - JS 表达式：`const element = <img src={user.avatarUrl}></img>;`
 - 属性展开：易将不必要的 props 传递给不相关的组件。建议谨慎使用
 
-```js
-const Button = props => {
+```javascript
+const Button = (props) => {
   const { kind, ...other } = props;
   const className = kind === "primary" ? "PrimaryButton" : "SecondaryButton";
   return <button className={className} {...other} />;
@@ -90,7 +90,7 @@ const Button = props => {
 - 函数：`{index => <div key={index}>This is item {index} </div>}`
 - true、false、null、undefined 是合法的子元素但不会被渲染：
 
-```js
+```javascript
 //确保 && 之前的表达式总是布尔值：
 <div>
   {props.messages.length > 0 && <MessageList messages={props.messages} />}
@@ -107,11 +107,11 @@ React 元素是不可变对象，代表某个特定时刻的 UI。React 只更�
 
 ### 1、基本概念
 
-| 组件| Vue | React |
-| :--: |---|---|
-| 定义 | 可复用的 Vue 实例 | Props 作为参数返回 React 元素的 JavaScript 函数|
-|命名| 推荐使用 kebab-case | 必须以大写字母开头 |
-| VirtualDOM 挂载 |实例 render 函数创建虚拟节点 VNode，如`render: h => h(App)`，el 选项或 vm.$mount() 再将其挂载在 DOM 节点|函数 render 方法返回 React 元素，再由 ReactDOM 的 render 方法将其挂载到 DOM 节点|
+|      组件       | Vue                                                                                                       | React                                                                            |
+| :-------------: | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+|      定义       | 可复用的 Vue 实例                                                                                         | Props 作为参数返回 React 元素的 JavaScript 函数                                  |
+|      命名       | 推荐使用 kebab-case                                                                                       | 必须以大写字母开头                                                               |
+| VirtualDOM 挂载 | 实例 render 函数创建虚拟节点 VNode，如`render: h => h(App)`，el 选项或 vm.\$mount() 再将其挂载在 DOM 节点 | 函数 render 方法返回 React 元素，再由 ReactDOM 的 render 方法将其挂载到 DOM 节点 |
 
 ### 2、组件分类
 
@@ -119,13 +119,16 @@ React 元素是不可变对象，代表某个特定时刻的 UI。React 只更�
 
 - 定义：作为 React.Component 子类，通过 props 从父组件向子组件传递数据
 - 状态维护：**state** 用于组件状态维护。在 React 组件的构造函数中设置 **this.state** 来初始化 state，其被视为一个**组件的私有属性**
+
   - 每次定义子类的构造函数时，都需要调用 **super** 方法。即 super(props) 开头
   - **每次在组件中调用 setState 时，React 都会自动更新其子组件**
+
 - 状态提升：需共享 state 向上移动到最近共同父组件中的 state 中用作“数据源”，即“状态提升”。任何可变数据应当只有一个相对应的唯一“数据源”。
+
   - 受控组件：由 React 控制并且所有的表单数据统一存放的组件。响应数据改变时，子组件调用 this.props.onChange() 而非 this.setState()。
   - 不可变性：不直接修改原数据/底层数据以便跟踪数据的改变，确定在 React 中何时重新渲染
 
-```js
+```javascript
 class Square extends React.Component {
   render() {
     return (
@@ -139,7 +142,7 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(null)
+      squares: Array(9).fill(null),
     };
   }
   handleClick(i) {
@@ -172,7 +175,7 @@ class Board extends React.Component {
 - 定义：不需定义一个继承于 React.Component 的类，可定义一个接收 props 作为参数的函数，然后返回需要渲染的元素
 - 使用场景：只包含一个 render 方法，不包含 state
 
-```js
+```javascript
 //把两个 this.props 都替换成了 props,注意两侧括号不再有
 function Square(props){
   render(){
@@ -205,7 +208,7 @@ State 与 props 类似，但是 state 是私有的，并且完全受控于当前
 
 ```jsx
 this.setState((state, props) => ({
-  counter: state.counter + props.increment
+  counter: state.counter + props.increment,
 }));
 ```
 
@@ -227,16 +230,17 @@ this.setState((state, props) => ({
 
 map 方法把数组转化为元素列表。**在 map() 方法中的元素需要设置 key 属性**，以便识别哪些元素被改变。
 
-```js
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
-  const listItems = numbers.map(number => (
+  const listItems = numbers.map((number) => (
     <li key={number.toString()}>{number}</li>
   ));
   return <ul>{listItems}</ul>;
 }
 const numbers = [1, 2, 3, 4, 5];
-ReactDOM.render(<NumberList numbers={numbers} />,
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
   document.getElementById("root")
 );
 ```
@@ -249,25 +253,28 @@ React 中，表单状态通常保存在组件的 state 属性中，且只能通�
 
 state 作为“唯一数据源”。被 React **控制取值**的表单输入元素叫做“受控组件”。
 
-```js
+```javascript
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: "" };
   }
-  handleChange=(event)=>{
+  handleChange = (event) => {
     this.setState({ value: event.target.value });
-  }
-  handleSubmit=(event)=>{
+  };
+  handleSubmit = (event) => {
     alert("提交的名字: " + this.state.value);
     event.preventDefault();
-  }
+  };
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>名字:
-          <input type="text" value={this.state.value}
+        <label>
+          名字:
+          <input
+            type="text"
+            value={this.state.value}
             onChange={this.handleChange}
           />
         </label>
@@ -282,24 +289,25 @@ class NameForm extends React.Component {
 
 React 使用 value 属性而非 selected 属性，可传入数组以支持多选。如`<select multiple={true} value={['B', 'C']}>`
 
-```js
+```javascript
 class FlavorForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: "coconut" };
   }
-  handleChange=(event)=> {
+  handleChange = (event) => {
     this.setState({ value: event.target.value });
-  }
-  handleSubmit=(event)=> {
+  };
+  handleSubmit = (event) => {
     alert("你喜欢的风味是: " + this.state.value);
     event.preventDefault();
-  }
+  };
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>选择你喜欢的风味:
+        <label>
+          选择你喜欢的风味:
           <select value={this.state.value} onChange={this.handleChange}>
             <option value="coconut">椰子</option>
             <option value="mango">芒果</option>
@@ -320,36 +328,44 @@ class FlavorForm extends React.Component {
 
 每个元素添加 name 属性，根据 `event.target.name` 的值选择要执行的操作。完整解决方案可使用 Formik 库
 
-```js
+```javascript
 class Reservation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isGoing: true,
-      numberOfGuests: 2
+      numberOfGuests: 2,
     };
   }
 
-  handleInputChange=(event)=> {
+  handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
-  }
+  };
 
   render() {
     return (
       <form>
-        <label>参与:
-          <input name="isGoing" type="checkbox" checked={this.state.isGoing}
+        <label>
+          参与:
+          <input
+            name="isGoing"
+            type="checkbox"
+            checked={this.state.isGoing}
             onChange={this.handleInputChange}
           />
         </label>
-        <br />
-        <label>来宾人数:
-          <input name="numberOfGuests" type="number" value={this.state.numberOfGuests}
+
+        <label>
+          来宾人数:
+          <input
+            name="numberOfGuests"
+            type="number"
+            value={this.state.numberOfGuests}
             onChange={this.handleInputChange}
           />
         </label>
@@ -367,7 +383,7 @@ class Reservation extends React.Component {
 
 使用一个特殊的 children prop 来将子组件传递到渲染结果中预留位置。可不使用 children，自行约定，同“槽”slot
 
-```js
+```javascript
 function FancyBorder(props) {
   return (
     <div className={"FancyBorder FancyBorder-" + props.color}>
@@ -381,7 +397,7 @@ function FancyBorder(props) {
 
 组件看作是其他组件的特殊实例。“特殊”组件可以通过 props 定制并渲染“一般”组件：
 
-```js
+```javascript
 function Dialog(props) {
   return (
     <FancyBorder color="blue">
@@ -397,8 +413,12 @@ class SignUpDialog extends React.Component {
     super(props);
     this.state = { login: "" };
   }
-  handleChange=(e)=> {this.setState({ login: e.target.value });}
-  handleSignUp=()=> {alert(`Welcome aboard, ${this.state.login}!`);}
+  handleChange = (e) => {
+    this.setState({ login: e.target.value });
+  };
+  handleSignUp = () => {
+    alert(`Welcome aboard, ${this.state.login}!`);
+  };
 
   render() {
     return (
@@ -438,7 +458,7 @@ class SignUpDialog extends React.Component {
 
 用于处理动态引入的组件。Suspense 组件可包裹多个 lazy 组件并置于之上任何位置，fallback 属性接受组件加载过程中任何可展示的 React 元素
 
-```js
+```javascript
 const OtherComponent = React.lazy(() => import("./OtherComponent"));
 function MyComponent() {
   return (
@@ -455,7 +475,7 @@ function MyComponent() {
 
 模块加载失败（如网络问题）可通过异常捕获边界（Error boundaries）技术来处理，以显示良好的用户体验并管理恢复事宜
 
-```js
+```javascript
 import MyErrorBoundary from "./MyErrorBoundary";
 const OtherComponent = React.lazy(() => import("./OtherComponent"));
 const AnotherComponent = React.lazy(() => import("./AnotherComponent"));
@@ -464,7 +484,10 @@ const MyComponent = () => (
   <div>
     <MyErrorBoundary>
       <Suspense fallback={<div>Loading...</div>}>
-        <section><OtherComponent /><AnotherComponent /></section>
+        <section>
+          <OtherComponent />
+          <AnotherComponent />
+        </section>
       </Suspense>
     </MyErrorBoundary>
   </div>
@@ -475,7 +498,7 @@ const MyComponent = () => (
 
 使用 React.lazy 和 React Router 这类的第三方库，来配置基于路由的代码分割
 
-```js
+```javascript
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import React, { Suspense, lazy } from "react";
 
@@ -500,7 +523,7 @@ const App = () => (
 
 将数据向组件树下所有组件“广播”，共享组件树全局数据以便不同层级的组件访问。
 
-```js
+```javascript
 // 1、为当前的 theme 创建一个 context 对象（“light”为默认值）。
 const ThemeContext = React.createContext("light");
 
@@ -540,11 +563,11 @@ class ThemedButton extends React.Component {
 - 可以通过 context 传递一个函数，使得 consumers 组件更新 context.
 - provider 的父组件进行重渲染时，可能会在 consumers 组件中触发意外的渲染。因为 value 属性总是被赋值为新的对象。必须将 value 状态提升到父节点的 state
 
-```js
+```javascript
 // 确保传递给 createContext 的默认值数据结构是调用的组件所能匹配的！
 const ThemeContext = React.createContext({
   theme: themes.dark,
-  toggleTheme: () => {}
+  toggleTheme: () => {},
 });
 
 function ThemeTogglerButton() {
@@ -568,13 +591,13 @@ class App extends React.Component {
     super(props);
 
     this.toggleTheme = () => {
-      this.setState(state => ({
-        theme: state.theme === themes.dark ? themes.light : themes.dark
+      this.setState((state) => ({
+        theme: state.theme === themes.dark ? themes.light : themes.dark,
       }));
     };
     this.state = {
       theme: themes.light,
-      toggleTheme: this.toggleTheme
+      toggleTheme: this.toggleTheme,
     };
   }
 
@@ -588,7 +611,11 @@ class App extends React.Component {
 }
 
 function Content() {
-  return (<div><ThemeTogglerButton /></div>);
+  return (
+    <div>
+      <ThemeTogglerButton />
+    </div>
+  );
 }
 
 ReactDOM.render(<App />, document.root);
@@ -601,7 +628,7 @@ ReactDOM.render(<App />, document.root);
 - 当抛出错误后，使用 `static getDerivedStateFromError()` 渲染备用 UI ，使用 `componentDidCatch()` 打印错误信息
 - **错误边界仅可以捕获其子组件的错误**，它无法捕获其自身的错误
 
-```js
+```javascript
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -639,30 +666,40 @@ class ErrorBoundary extends React.Component {
 
 #### 4.1 使用 Refs
 
-- 何时使用：管理焦点，文本选择或媒体播放；触发强制动画；集成第三方`DOM`库
-- 创建 refs：**React.createRef()** 创建并通过 ref 属性附加到 React 元素
+-
 
-  ```js
-  class MyComponent extends React.Component {
-    constructor(props) {
-      super(props);
-      this.myRef = React.createRef();
-    }
-    render() {
-      return <div ref={this.myRef} />;
-    }
+何时使用：管理焦点，文本选择或媒体播放；触发强制动画；集成第三方`DOM`库
+
+-
+
+创建 refs：**React.createRef()** 创建并通过 ref 属性附加到 React 元素
+
+```javascript
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
   }
-  //构造组件时，通常将 Refs 分配给实例属性，以便在整个组件中引用它们
-  ```
+  render() {
+    return <div ref={this.myRef} />;
+  }
+}
+//构造组件时，通常将 Refs 分配给实例属性，以便在整个组件中引用它们
+```
 
-- 访问 refs：ref 被传递给 render 中的元素时，由`this.myRef.current`引用
-  - ref 属性用于 HTML 元素时，ref 接收底层 DOM 元素为其`current`属性
-  - ref 属性用于自定义 class 组件时，ref 接收组件挂载实例为其`current` 属性
-  - **不能在函数组件上使用 ref 属性，因为他们没有实例**
-  - 可以在函数组件内部使用 ref 属性，只要它指向 DOM 元素或 class 组件
-- 回调 Refs：传递接受 React 组件实例或 HTML DOM 元素作为参数的函数。
+-
 
-```js
+访问 refs：ref 被传递给 render 中的元素时，由`this.myRef.current`引用
+
+- ref 属性用于 HTML 元素时，ref 接收底层 DOM 元素为其`current`属性
+- ref 属性用于自定义 class 组件时，ref 接收组件挂载实例为其`current` 属性
+- **不能在函数组件上使用 ref 属性，因为他们没有实例**
+- 可以在函数组件内部使用 ref 属性，只要它指向 DOM 元素或 class 组件
+-
+
+回调 Refs：传递接受 React 组件实例或 HTML DOM 元素作为参数的函数。
+
+```javascript
 function CustomTextInput(props) {
   return (
     <div>
@@ -673,11 +710,7 @@ function CustomTextInput(props) {
 
 class Parent extends React.Component {
   render() {
-    return (
-      <CustomTextInput
-        inputRef={el => this.inputElement = el}
-      />
-    );
+    return <CustomTextInput inputRef={(el) => (this.inputElement = el)} />;
   }
 }
 //Parent 中的 this.inputElement 会被设置为与 input 元素相对应的 DOM 节点
@@ -693,7 +726,7 @@ Ref 转发是可选特性，其允许某些组件接收 ref，并将其向下传
 - 向下转发该 ref 参数到 `<button ref={ref} />`，将其指定为 JSX 属性。
 - ref 挂载完成，ref.current 将指向 `<button>` DOM 节点
 
-```js
+```javascript
 const FancyButton = React.forwardRef((props, ref) => (
   <button ref={ref} className="FancyButton">
     {props.children}
@@ -707,7 +740,7 @@ const ref = React.createRef();
 
 #### 4.3 在高阶组件中转发 refs
 
-```js
+```javascript
 function logProps(Component) {
   class LogProps extends React.Component {
     componentDidUpdate(prevProps) {
@@ -736,7 +769,7 @@ function logProps(Component) {
 
 React.forwardRef 接受一个渲染函数。React DevTools 使用该函数来决定为 ref 转发组件显示的内容
 
-```js
+```javascript
 const WrappedComponent = React.forwardRef((props, ref) => {
   return <LogProps {...props} forwardedRef={ref} />;
 });
@@ -749,11 +782,11 @@ React 中的一个常见模式是一个组件返回多个元素。Fragments 允�
 - 短语法 `<> </>`也可声明 Fragments，但不支持 key 或属性
 - 带 key 的 Fragments：key 是唯一可以传递给 Fragment 的属性
 
-```js
+```javascript
 function Glossary(props) {
   return (
     <dl>
-      {props.items.map(item => (
+      {props.items.map((item) => (
         // 没有`key`，React 会发出一个关键警告
         <React.Fragment key={item.id}>
           <dt>{item.term}</dt>
@@ -775,7 +808,7 @@ function Glossary(props) {
 - 常见的 HOC 签名如下：`const ConnectedComment = connect(commentSelector, commentActions)(CommentList);`
 - 不要在 render 方法中使用 HOC，务必复制静态方法，Refs 不会被传递
 
-```js
+```javascript
 function withSubscription(WrappedComponent, selectData) {
   // ...并返回另一个组件...
   return class extends React.Component {
@@ -783,7 +816,7 @@ function withSubscription(WrappedComponent, selectData) {
       super(props);
       this.handleChange = this.handleChange.bind(this);
       this.state = {
-        data: selectData(DataSource, props)
+        data: selectData(DataSource, props),
       };
     }
 
@@ -798,7 +831,7 @@ function withSubscription(WrappedComponent, selectData) {
 
     handleChange() {
       this.setState({
-        data: selectData(DataSource, this.props)
+        data: selectData(DataSource, this.props),
       });
     }
 
@@ -814,12 +847,13 @@ function withSubscription(WrappedComponent, selectData) {
 ### 7、Portals
 
 Portal 提供了一种将子节点渲染到存在于父组件以外的 DOM 节点的优秀的方案。
+
 `ReactDOM.createPortal(child, container)`
 
 - 一个 portal 的典型用例是当父组件有 overflow: hidden 或 z-index 样式时，但你需要子组件能够在视觉上“跳出”其容器。例如，对话框、悬浮卡以及提示框
 - 当在使用 portal 时, 管理键盘焦点尤为重要
 
-```js
+```javascript
 render() {
   // React 并*没有*创建一个新的 div。它只是把子元素渲染到 `domNode` 中。
   // `domNode` 是一个可以在任何位置的有效 DOM 节点。
@@ -874,12 +908,15 @@ function onRenderCallback(
 - 作用：分享一个组件封装到其他需要相同 state 组件的状态或行为
 - 特点：render prop 是一个用于告知组件需要渲染什么内容的函数 prop。带有函数 prop 的 `<Mouse>` 组件，能动态决定什么需要渲染，而不是将 `<Cat>` 硬编码到 `<Mouse>` 组件里，并有效地改变它的渲染结果
 
-```js
+```javascript
 class Cat extends React.Component {
   render() {
     const mouse = this.props.mouse;
     return (
-      <img src="/cat.jpg" style={{ position: 'absolute', left: mouse.x, top: mouse.y }} />
+      <img
+        src="/cat.jpg"
+        style={{ position: "absolute", left: mouse.x, top: mouse.y }}
+      />
     );
   }
 }
@@ -894,13 +931,13 @@ class Mouse extends React.Component {
   handleMouseMove(event) {
     this.setState({
       x: event.clientX,
-      y: event.clientY
+      y: event.clientY,
     });
   }
 
   render() {
     return (
-      <div style={{ height: '100%' }} onMouseMove={this.handleMouseMove}>
+      <div style={{ height: "100%" }} onMouseMove={this.handleMouseMove}>
         {this.props.render(this.state)}
       </div>
     );
@@ -912,9 +949,7 @@ class MouseTracker extends React.Component {
     return (
       <div>
         <h1>移动鼠标!</h1>
-        <Mouse render={mouse => (
-          <Cat mouse={mouse} />
-        )}/>
+        <Mouse render={(mouse) => <Cat mouse={mouse} />} />
       </div>
     );
   }
@@ -923,17 +958,17 @@ class MouseTracker extends React.Component {
 
 - 可使用带有 render prop 的常规组件来实现大多数高阶组件 (HOC)
 
-```js
+```javascript
 function withMouse(Component) {
   return class extends React.Component {
     render() {
       return (
-        <Mouse render={mouse => (
-          <Component {...this.props} mouse={mouse} />
-        )}/>
+        <Mouse
+          render={(mouse) => <Component {...this.props} mouse={mouse} />}
+        />
       );
     }
-  }
+  };
 }
 ```
 
@@ -941,21 +976,21 @@ function withMouse(Component) {
 
 - 任何被用于告知组件需要渲染什么内容的函数 prop 在技术上都可以被称为 “render prop”.
 
- ```jsx
- <Mouse children={mouse => (
-  <p>鼠标的位置是 {mouse.x}，{mouse.y}</p>
+```jsx
+<Mouse children={mouse => (
+ <p>鼠标的位置是 {mouse.x}，{mouse.y}</p>
 )}/>
 
- <Mouse>
-  {mouse => (
-    <p>鼠标的位置是 {mouse.x}，{mouse.y}</p>
-  )}
+<Mouse>
+ {mouse => (
+   <p>鼠标的位置是 {mouse.x}，{mouse.y}</p>
+ )}
 </Mouse>
- ```
+```
 
 - render prop 会抵消使用 React.PureComponent 带来的优势：可以定义一个 prop 作为实例方法
 
-```js
+```javascript
 class MouseTracker extends React.Component {
   // 定义为实例方法，`this.renderTheCat`始终
   // 当我们在渲染中使用它时，它指的是相同的函数
@@ -985,25 +1020,26 @@ class MouseTracker extends React.Component {
 
 ## 🎒 Hooks
 
-### 1、Hooks简介
+### 1、Hooks 简介
 
 Hook 是一些可以让你在函数组件里“钩入” React state 及生命周期等特性的函数。Hook 不能在 class 组件中使用。
 
 - 特点：不编写 class 的情况下使用 state 以及其他的 React 特性
 - 解决的问题
+
   - 优化组件间复用状态逻辑：无需修改组件结构的情况下复用状态逻辑
   - 更好理解复杂组件：将组件中相互关联的部分拆分成更小的函数，非强制按照生命周期划分。使用 reducer 来管理组件的内部状态，使其更加可预测
-  - class问题：非 class 的情况下可以使用更多的 React 特性，可渐进式地使用
+  - class 问题：非 class 的情况下可以使用更多的 React 特性，可渐进式地使用
 
-### 2、Hooks概览
+### 2、Hooks 概览
 
 #### 2.1 State Hook
 
 - useState 就是一个 Hook。通过在函数组件里调用它来给组件添加一些内部 state。React 会在重复渲染时保留这个 state。
 - useState 会返回一对值：当前状态和一个让你更新它的函数，你可以在事件处理函数中或其他一些地方调用这个函数。
 
-```js
-import React, { useState } from 'react';
+```javascript
+import React, { useState } from "react";
 
 function Example() {
   // 1、声明 State 变量：
@@ -1015,9 +1051,7 @@ function Example() {
     //3、更新 State：调用 setState(newState)，不需要 this
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   );
 }
@@ -1025,13 +1059,13 @@ function Example() {
 
 #### 2.2 Effect Hook
 
->React 组件中**执行数据获取、订阅或者手动修改 DOM，称为“副作用”**。useEffect 就是一个 Effect Hook，使函数组件操作副作用。与 class 组件中的 componentDidMount、componentDidUpdate、componentWillUnmount 相同
+> React 组件中**执行数据获取、订阅或者手动修改 DOM，称为“副作用”**。useEffect 就是一个 Effect Hook，使函数组件操作副作用。与 class 组件中的 componentDidMount、componentDidUpdate、componentWillUnmount 相同
 
 - React 在完成对 DOM 的更改后运行你的“副作用”函数。其可访问组件的 props 和 state。默认**React 会在每次渲染后调用副作用函数** —— 包括第一次渲染的时候
 - 无需清除的 effect：如发送网络请求，手动变更 DOM，记录日志等
 
-```js
-import React, { useState, useEffect } from 'react';
+```javascript
+import React, { useState, useEffect } from "react";
 
 function Example() {
   const [count, setCount] = useState(0);
@@ -1045,29 +1079,28 @@ function Example() {
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   );
 }
 ```
 
 - 需要清除的 effect：如订阅外部数据源，以防止引起内存泄露。
-  - **effect 有可选的清除机制**。每个 effect 都可返回一个清除函数。将添加和移除订阅的逻辑放在一起。React 会在组件卸载时执行清除操作
-  
-```js
-useEffect(() => {
-    function handleStatusChange(status) {
-      setIsOnline(status.isOnline);
-    }
 
-    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
-    // 指定该作用后如何清除
-    return ()=>{
-      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
-    };
-  });
+  - **effect 有可选的清除机制**。每个 effect 都可返回一个清除函数。将添加和移除订阅的逻辑放在一起。React 会在组件卸载时执行清除操作
+
+```javascript
+useEffect(() => {
+  function handleStatusChange(status) {
+    setIsOnline(status.isOnline);
+  }
+
+  ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+  // 指定该作用后如何清除
+  return () => {
+    ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+  };
+});
 ```
 
 #### 2.3 Hook 使用规则
@@ -1077,13 +1110,13 @@ useEffect(() => {
 
 #### 2.4 自定义 Hook
 
->自定义 Hook 是一个函数，其名称以 “use” 开头，函数内部可以调用其他的 Hook。用于共享组件之间的状态逻辑（另有高阶组件、render props）
+> 自定义 Hook 是一个函数，其名称以 “use” 开头，函数内部可以调用其他的 Hook。用于共享组件之间的状态逻辑（另有高阶组件、render props）
 
 - 自定义 Hook 是一种重用状态逻辑的机制(例如设置为订阅并存储当前值)，所以每次使用自定义 Hook 时，其中的所有 state 和副作用都是完全隔离的。
 - Hook 的每次调用都有一个完全独立的 state
 
-```js
-import React, { useState, useEffect } from 'react';
+```javascript
+import React, { useState, useEffect } from "react";
 //1、提取自定义Hook
 function useFriendStatus(friendID) {
   const [isOnline, setIsOnline] = useState(null);
@@ -1106,25 +1139,23 @@ function FriendStatus(props) {
   const isOnline = useFriendStatus(props.friend.id);
 
   if (isOnline === null) {
-    return 'Loading...';
+    return "Loading...";
   }
-  return isOnline ? 'Online' : 'Offline';
+  return isOnline ? "Online" : "Offline";
 }
 
 function FriendListItem(props) {
   const isOnline = useFriendStatus(props.friend.id);
 
   return (
-    <li style={{ color: isOnline ? 'green' : 'black' }}>
-      {props.friend.name}
-    </li>
+    <li style={{ color: isOnline ? "green" : "black" }}>{props.friend.name}</li>
   );
 }
 //3、多个 Hook 间传递信息
 const friendList = [
-  { id: 1, name: 'Phoebe' },
-  { id: 2, name: 'Rachel' },
-  { id: 3, name: 'Ross' },
+  { id: 1, name: "Phoebe" },
+  { id: 2, name: "Rachel" },
+  { id: 3, name: "Ross" },
 ];
 
 function ChatRecipientPicker() {
@@ -1133,12 +1164,12 @@ function ChatRecipientPicker() {
 
   return (
     <>
-      <Circle color={isRecipientOnline ? 'green' : 'red'} />
+      <Circle color={isRecipientOnline ? "green" : "red"} />
       <select
         value={recipientID}
-        onChange={e => setRecipientID(Number(e.target.value))}
+        onChange={(e) => setRecipientID(Number(e.target.value))}
       >
-        {friendList.map(friend => (
+        {friendList.map((friend) => (
           <option key={friend.id} value={friend.id}>
             {friend.name}
           </option>

@@ -1,6 +1,6 @@
 # NodeJS 模块
 
->node server.js 可替换为 nodemon server.js支持热更新
+> node server.js 可替换为 nodemon server.js 支持热更新
 
 ## 一、模块机制
 
@@ -37,11 +37,11 @@
 - 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列
 - 使用回调函数监听一个事件，on 表示注册事件监听函数，emit 表示触发监听函数
 
-```js
+```javascript
 const EventEmitter = require("events").EventEmitter;
 const emitter = new EventEmitter();
 
-emitter.on("起床", function(time) {
+emitter.on("起床", function (time) {
   console.log(`早上 ${time} 开始起床，新的一天加油！`);
 });
 
@@ -50,16 +50,16 @@ emitter.emit("起床", "6:00");
 
 ### 2、基于 EventEmitter 自定义类
 
-```js
+```javascript
 //继承于 EventEmitter
 const EventEmitter = require("events");
 const oneDayPlanRun = {
-  "6:00": function() {
+  "6:00": function () {
     console.log(`现在是早上 6:00，起床，开始新的一天加油！`);
   },
-  "7:00": function() {
+  "7:00": function () {
     console.log(`现在是早上 7:00，吃早饭！`);
-  }
+  },
 };
 
 function OneDayPlan() {
@@ -71,11 +71,11 @@ Object.setPrototypeOf(OneDayPlan, EventEmitter);
 //实例化类，实现事件的触发、监听
 const oneDayPlan = new OneDayPlan();
 
-oneDayPlan.on("6:00", function() {
+oneDayPlan.on("6:00", function () {
   oneDayPlanRun["6:00"]();
 });
 
-oneDayPlan.on("7:00", function() {
+oneDayPlan.on("7:00", function () {
   oneDayPlanRun["7:00"]();
 });
 
@@ -90,8 +90,8 @@ async function doMain() {
 doMain();
 
 async function sleep(s) {
-  return new Promise(function(resolve) {
-    setTimeout(function() {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
       resolve(1);
     }, s);
   });
@@ -109,11 +109,11 @@ async function sleep(s) {
 - EventEmitter 会按照监听器注册的顺序**同步**地调用所有监听器。 所以必须确保事件的排序正确，且避免竞态条件
 - 异步模式：使用 `setImmediate()` 或 `process.nextTick()` 切换
 
-```js
+```javascript
 const events = require("events");
 const emitter = new events.EventEmitter();
 
-emitter.on("test", function() {
+emitter.on("test", function () {
   setImmediate(() => {
     console.log(111);
   });
@@ -126,11 +126,11 @@ console.log(222); //输出：222 111
 
 应该始终为 'error' 事件注册监听器
 
-```js
+```javascript
 const events = require("events");
 const emitter = new events.EventEmitter();
 
-emitter.on("error", function(err) {
+emitter.on("error", function (err) {
   console.error(err);
 });
 
@@ -148,7 +148,7 @@ console.log("test");
 - 数据加密
   - `crypto.createCipheriv(algorithm, pwd, iv)`指定算法、密码、向量，创建加密对象`cipher`
 
-```js
+```javascript
 function cipher(str) {
   try {
     const crypto = require("crypto");
@@ -181,7 +181,7 @@ cipher("hello,world"); //ffdba47df8b1e3835d82e3681c83bb77
 
 - 数据解密
 
-```js
+```javascript
 function decipher(encrypted) {
   try {
     const crypto = require("crypto");
@@ -207,13 +207,10 @@ decipher("ffdba47df8b1e3835d82e3681c83bb77"); //'hello,world'
 - 计算所有传入数据的 hash 摘要(digest)：`hash.digest(encoding='binary')`
   - `encodeing`编码方式可选 `hex`、`binary`、`base64`
 
-```js
+```javascript
 const crypto = require("crypto");
-const md5 = str => {
-  return crypto
-    .createHash("md5")
-    .update(str, "utf8")
-    .digest("hex");
+const md5 = (str) => {
+  return crypto.createHash("md5").update(str, "utf8").digest("hex");
 };
 console.log(md5("123456789")); //默认输出32位小写字母
 ```
@@ -259,7 +256,7 @@ console.log(md5("123456789")); //默认输出32位小写字母
 - 'latin1' —— 同'binary'，一种将 Buffer 编码成单字节编码字符串的方法
 - 'hex' —— 将每个字节编码成两个十六进制的字符
 
-```js
+```javascript
 //字符串转换为 Buffer 类型
 //一个中文在 UTF-8 下占用 3 个字节
 const buf = Buffer.from("Node.js 技术", "UTF-8");
@@ -286,7 +283,7 @@ console.log(buf.toString("UTF-8", 0, 11)); //Node.js 技
 
 - I/O 操作： I/O 可以是文件或网络 I/O，流中将会自动创建 Buffer
 
-```js
+```javascript
 const fs = require("fs");
 
 const inputStream = fs.createReadStream("input.txt"); // 创建可读流
@@ -302,7 +299,7 @@ inputStream.pipe(outputStream); // 管道读写
     - end: 结束填充 buf 的偏移量
     - encoding: 编码集
 
-```js
+```javascript
 //Cipher 的对称加密
 const crypto = require("crypto");
 const [key, iv, algorithm, encoding, cipherEncoding] = [
@@ -310,10 +307,10 @@ const [key, iv, algorithm, encoding, cipherEncoding] = [
   "",
   "aes-128-ecb",
   "utf8",
-  "base64"
+  "base64",
 ];
 
-const handleKey = key => {
+const handleKey = (key) => {
   const bytes = Buffer.alloc(16); // 初始化一个 Buffer 实例，每一项都用 00 填充
   console.log(bytes); // <Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00>
   bytes.fill(key, 0, 10); // 填充
@@ -342,7 +339,7 @@ console.log(crypted); // jE0ODwuKN6iaKFKqd3RF4xFZkOpasy8WfIDl8tRC5t0=
 
 - 多进程就是进程的复制（fork），fork 出来的每个进程都拥有自己的独立空间地址、数据栈，一个进程无法访问另外一个进程里定义的变量、数据结构，只有建立了 IPC 通信，进程之间才可数据共享
 
-```js
+```javascript
 // process.js
 const http = require("http");
 
@@ -374,8 +371,8 @@ http.createServer().listen(3000, () => {
 
 > 在多核 CPU 系统之上，可以用过 child_process.fork 开启多个进程（Node.js 在 v0.8 版本之后新增了`Cluster`集群来实现多进程架构），即`多进程+单线程`模式
 
-- 进程 Process：一个全局对象，无需 require 直接使用
-  - process.env：环境变量，例如通过 process.env.NODE_ENV 获取不同环境项目配置信息
+- **进程 Process：一个全局对象，无需 require 直接使用**
+  - **process.env：环境变量，例如通过 process.env.NODE_ENV 获取不同环境项目配置信息**
   - process.nextTick：这个在谈及 Event Loop 时经常会提到
   - process.pid：获取当前进程 id
   - process.ppid：当前进程对应的父进程
@@ -400,7 +397,7 @@ http.createServer().listen(3000, () => {
 
 - 编写主进程
 
-```js
+```javascript
 // master.js
 const fork = require("child_process").fork;
 const cpus = require("os").cpus();
@@ -412,12 +409,12 @@ process.title = "node-master";
 const workers = {};
 const createWorker = () => {
   const worker = fork("worker.js");
-  worker.on("message", function(message) {
+  worker.on("message", function (message) {
     if (message.act === "suicide") {
       createWorker();
     }
   });
-  worker.on("exit", function(code, signal) {
+  worker.on("exit", function (code, signal) {
     console.log("worker process exited, code: %s signal: %s", code, signal);
     delete workers[worker.pid];
   });
@@ -454,13 +451,13 @@ function close(code) {
 
 - 工作进程
 
-```js
+```javascript
 // worker.js
 const http = require("http");
 //创建一个 server 对象，注意这里最开始并没有监听 3000 端口
 const server = http.createServer((req, res) => {
   res.writeHead(200, {
-    "Content-Type": "text/plan"
+    "Content-Type": "text/plan",
   });
   res.end("I am worker, pid: " + process.pid + ", ppid: " + process.ppid);
   throw new Error("worker process exception!"); // 测试异常进程退出、重建
@@ -469,20 +466,20 @@ const server = http.createServer((req, res) => {
 let worker;
 process.title = "node-worker";
 //通过 message 事件接收主进程 send 方法发送的消息
-process.on("message", function(message, sendHandle) {
+process.on("message", function (message, sendHandle) {
   if (message === "server") {
     worker = sendHandle;
-    worker.on("connection", function(socket) {
+    worker.on("connection", function (socket) {
       server.emit("connection", socket);
     });
   }
 });
 //监听 uncaughtException 事件，捕获未处理的异常
 //发送自杀信息由主进程重建进程，子进程在链接关闭之后退出
-process.on("uncaughtException", function(err) {
+process.on("uncaughtException", function (err) {
   console.log(err);
   process.send({ act: "suicide" });
-  worker.close(function() {
+  worker.close(function () {
     process.exit(1);
   });
 });
@@ -490,7 +487,7 @@ process.on("uncaughtException", function(err) {
 
 - 测试：控制台执行 node master.js 可以看到已成功创建了四个工作进程
 
-```js
+```javascript
 $ node master
 worker process created, pid: 19280 ppid: 19279
 worker process created, pid: 19281 ppid: 19279
@@ -507,18 +504,18 @@ worker process created, pid: 19283 ppid: 19279
   - 在子进程中创建新会话（调用系统函数 setsid）
   - 改变子进程工作目录（如：“/” 或 “/usr/ 等）
   - 父进程终止
-- 测试：$ node index.js
+- 测试：\$ node index.js
   - 守护进程开启 父进程 pid: 47608, 守护进程 pid: 47609
 
-```js
+```javascript
 // index.js
 const spawn = require("child_process").spawn;
 
 function startDaemon() {
   const daemon = spawn("node", ["daemon.js"], {
-    cwd: "/usr",//指定当前子进程工作目录若不做设置默认继承当前工作目录
+    cwd: "/usr", //指定当前子进程工作目录若不做设置默认继承当前工作目录
     detached: true, //使子进程在父进程退出后继续运行(系统层调用setsid方法）
-    stdio: "ignore"//运行 daemon.unref() 退出父进程
+    stdio: "ignore", //运行 daemon.unref() 退出父进程
   });
 
   console.log(
@@ -542,29 +539,29 @@ const logger = new Console(
 );
 //开启一个定时器每 10 秒执行一次，使该资源不会退出
 //同时写入日志到子进程当前工作目录下
-setInterval(function() {
+setInterval(function () {
   logger.log("daemon pid: ", process.pid, ", ppid: ", process.ppid);
 }, 1000 * 10);
 ```
 
-### 4、interview相关
+### 4、interview 相关
 
 - 什么是孤儿进程？
   - 父进程创建子进程之后，父进程退出了，但父进程对应的一个或多个子进程还在运行，这些子进程会被系统的 init 进程收养，对应的进程 ppid 为 1，即为孤儿进程
 - 多进程模式下怎么实现多端口监听？
-  - 当父子进程之间建立 IPC 通道之后，通过子进程对象的 send 方法发送消息，第二个参数 sendHandle 就是句柄，可以是 TCP套接字、TCP服务器、UDP套接字等，为了解决上面多进程端口占用问题，我们将主进程的 socket 传递到子进程
+  - 当父子进程之间建立 IPC 通道之后，通过子进程对象的 send 方法发送消息，第二个参数 sendHandle 就是句柄，可以是 TCP 套接字、TCP 服务器、UDP 套接字等，为了解决上面多进程端口占用问题，我们将主进程的 socket 传递到子进程
 - 什么是 IPC 通信，如何建立 IPC 通信？父子进程间如何通信？
   - IPC (Inter-process communication) ，即进程间通信技术，由于每个进程创建之后都有自己的独立地址空间，实现 IPC 的目的就是为了进程之间资源共享访问，实现 IPC 的方式有多种：管道、消息队列、信号量、Domain Socket，Node.js 通过 pipe 来实现
   - 父进程在创建子进程之前会先去创建 IPC 通道并一直监听该通道，之后开始创建子进程并通过环境变量（NODE_CHANNEL_FD）的方式将 IPC 频道的文件描述符传递给子进程，子进程启动时根据传递的文件描述符去链接 IPC 通道，从而建立父子进程之间的通信机制
 
-```js
+```javascript
 // pipe.js
-const spawn = require('child_process').spawn;
-const child = spawn('node', ['worker.js'])
-child.stdout.pipe(process.stdout);// 将子进程的输出做为当前进程的输入
+const spawn = require("child_process").spawn;
+const child = spawn("node", ["worker.js"]);
+child.stdout.pipe(process.stdout); // 将子进程的输出做为当前进程的输入
 console.log(process.pid, child.pid);
 // worker.js
-console.log('I am worker, PID: ', process.pid);
+console.log("I am worker, PID: ", process.pid);
 ```
 
 - 进程的当前工作目录？有何作用？
@@ -573,79 +570,78 @@ console.log('I am worker, PID: ', process.pid);
 - 多进程或多个 Web 服务之间的状态共享问题？
   - 多进程模式下各个进程之间是相互独立的，一般通过 Redis 或者 数据库来做数据共享
 
-## 六、console日志模块(Logger模块基本使用)
+## 六、console 日志模块(Logger 模块基本使用)
 
 - 日志输出至终端
 
-```js
-const logger = reuqire('logger');
+```javascript
+const logger = reuqire("logger");
 
-logger.log('hello world') // 普通日志打印
-logger.info('hello world') // 等同于logger.log
-logger.error('hello world') // 错误日志打印
-logger.warn('hello world') // 等同于logger.error
-logger.clear() // 清除控制台信息
+logger.log("hello world"); // 普通日志打印
+logger.info("hello world"); // 等同于logger.log
+logger.error("hello world"); // 错误日志打印
+logger.warn("hello world"); // 等同于logger.error
+logger.clear(); // 清除控制台信息
 ```
 
 - 日志输出至文件
 
-```js
-const fs = require('fs');
-const output = fs.createWriteStream('./stdout.txt');
-const errorOutput = fs.createWriteStream('./stderr.txt');
-const { Logger } = require('./logger');
+```javascript
+const fs = require("fs");
+const output = fs.createWriteStream("./stdout.txt");
+const errorOutput = fs.createWriteStream("./stderr.txt");
+const { Logger } = require("./logger");
 
 const logger = Logger(output, errorOutput);
 
-logger.info('hello world!'); // 内容输出到 stdout.txt 文件
-logger.error('错误日志记录'); // 内容输出到 stderr.txt 文件
-
+logger.info("hello world!"); // 内容输出到 stdout.txt 文件
+logger.error("错误日志记录"); // 内容输出到 stderr.txt 文件
 ```
 
-- dir显示一个对象的所有属性和方法
+- dir 显示一个对象的所有属性和方法
 
-```js
+```javascript
 const family = {
-    name: 'Jack',
-    brother: {
-        hobby: ['篮球', '足球']
-    }
-}
+  name: "Jack",
+  brother: {
+    hobby: ["篮球", "足球"],
+  },
+};
 //depth - 表示最大递归的层数
-logger.dir(family, {depth: 3});
+logger.dir(family, { depth: 3 });
 
 // { name: 'Jack', brother: { hobby: [ '篮球', '足球' ] } }
 ```
 
 - 计算程序执行消耗时间
 
-```js
+```javascript
 // 启动计时器
-logger.time('计时器');
+logger.time("计时器");
 
 // 中间写一些测试代码
-for(let i=0; i < 1000000000; i++){}
+for (let i = 0; i < 1000000000; i++) {}
 
 // 停止计时器
-logger.timeEnd('计时器');
+logger.timeEnd("计时器");
 
 // 计时器: 718.034ms
 ```
 
-## 七、Net网络模块
+## 七、Net 网络模块
 
->Net 与 Dgram 是基于网络模型的传输层来实现的，分别对应于 TCP、UDP 协议
+> Net 与 Dgram 是基于网络模型的传输层来实现的，分别对应于 TCP、UDP 协议
 
-- TCP协议特点：
-  - 面向链接: 需要对方主机在线，并建立连接(3次握手)或断开连接(4次握手)。在一次 TCP 三次握手的过程中，客户端与服务端会分别提供一个套接字来形成一个链接并通过它互相发送数据。
+- TCP 协议特点：
+  - 面向链接: 需要对方主机在线，并建立连接(3 次握手)或断开连接(4 次握手)。在一次 TCP 三次握手的过程中，客户端与服务端会分别提供一个套接字来形成一个链接并通过它互相发送数据。
   - 面向字节流：每次选出一段字节发送的时候，都会带上一个序号，即字节中编号最小的字节的编号
   - 可靠性：保证数据有序的到达对方主机，每发送一个数据就会期待收到对方的回复，如果在指定时间内收到了对方的回复，就确认为数据到达，否则重新发送一遍。
 
-### 1、Net模块创建TCP服务
+### 1、Net 模块创建 TCP 服务
 
->net 模块用于创建基于流的 TCP 或 IPC 的服务器（net.createServer()）与客户端（net.createConnection()）
+> net 模块用于创建基于流的 TCP 或 IPC 的服务器（net.createServer()）与客户端（net.createConnection()）
 
-```js
+```javascript
 const net = require('net');
 const server = net.createServer();
 //服务器可以是一个 TCP 服务器或 IPC 服务器，这取决于 listen() 监听什么
@@ -657,7 +653,7 @@ const server = net.createServer();
 server.listen([port[, host[, backlog]]][, callback])
 ```
 
-#### 1.1 TCP服务事件
+#### 1.1 TCP 服务事件
 
 - listening：监听事件，调用`server.listen()`绑定服务器之后触发
 - connection：当一个新的链接建立的时候触发，也就是每次收到客户端回调
@@ -669,11 +665,11 @@ server.listen([port[, host[, backlog]]][, callback])
 - close：当 server 关闭的时候触发（server.close()）。 如果有连接存在，直到所有的连接结束才会触发这个事件
 - error：捕获错误，例如监听一个已经存在的端口就会报 Error: listen EADDRINUSE 错误
 
-#### 1.2 TCP服务端代码实现
+#### 1.2 TCP 服务端代码实现
 
-```js
-const net = require('net');
-const HOST = '127.0.0.1';
+```javascript
+const net = require("net");
+const HOST = "127.0.0.1";
 const PORT = 3000;
 
 // 创建一个 TCP 服务实例
@@ -682,152 +678,151 @@ const server = net.createServer();
 // 监听端口
 server.listen(PORT, HOST);
 
-server.on('listening', () => {
-    console.log(`服务已开启在 ${HOST}:${PORT}`);
+server.on("listening", () => {
+  console.log(`服务已开启在 ${HOST}:${PORT}`);
 });
 
-server.on('connection', socket => {
-    // data 事件就是读取数据
-    socket.on('data', buffer => {
-        const msg = buffer.toString();
-        console.log(msg);
+server.on("connection", (socket) => {
+  // data 事件就是读取数据
+  socket.on("data", (buffer) => {
+    const msg = buffer.toString();
+    console.log(msg);
 
-        // write 方法写入数据，发回给客户端
-        socket.write(Buffer.from('你好 ' + msg));
-    });
-})
-
-server.on('close', () => {
-    console.log('Server Close!');
+    // write 方法写入数据，发回给客户端
+    socket.write(Buffer.from("你好 " + msg));
+  });
 });
 
-server.on('error', err => {
-    if (err.code === 'EADDRINUSE') {
-        console.log('地址正被使用，重试中...');
+server.on("close", () => {
+  console.log("Server Close!");
+});
 
-        setTimeout(() => {
-            server.close();
-            server.listen(PORT, HOST);
-        }, 1000);
-    } else {
-        console.error('服务器异常：', err);
-    }
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.log("地址正被使用，重试中...");
+
+    setTimeout(() => {
+      server.close();
+      server.listen(PORT, HOST);
+    }, 1000);
+  } else {
+    console.error("服务器异常：", err);
+  }
 });
 ```
 
-#### 1.3 TCP客户端代码实现
+#### 1.3 TCP 客户端代码实现
 
-```js
-const net = require('net');
+```javascript
+const net = require("net");
 const client = net.createConnection({
-    host: '127.0.0.1',
-    port: 3000
+  host: "127.0.0.1",
+  port: 3000,
 });
 
-client.on('connect', () => {
-    // 向服务器发送数据
-    client.write('Nodejs 技术栈');
+client.on("connect", () => {
+  // 向服务器发送数据
+  client.write("Nodejs 技术栈");
 
-    setTimeout(() => {
-        client.write('JavaScript ');
-        client.write('TypeScript ');
-        client.write('Python ');
-        client.write('Java ');
-        client.write('C ');
-        client.write('PHP ');
-        client.write('ASP.NET ');
-    }, 1000);
-})
+  setTimeout(() => {
+    client.write("JavaScript ");
+    client.write("TypeScript ");
+    client.write("Python ");
+    client.write("Java ");
+    client.write("C ");
+    client.write("PHP ");
+    client.write("ASP.NET ");
+  }, 1000);
+});
 
-client.on('data', buffer => {
-    console.log(buffer.toString());
+client.on("data", (buffer) => {
+  console.log(buffer.toString());
 });
 
 // 例如监听一个未开启的端口就会报 ECONNREFUSED 错误
-client.on('error', err => {
-    console.error('服务器异常：', err);
+client.on("error", (err) => {
+  console.error("服务器异常：", err);
 });
 
-client.on('close', err => {
-    console.log('客户端链接断开！', err);
+client.on("close", (err) => {
+  console.log("客户端链接断开！", err);
 });
 ```
 
-### 2、TCP粘包问题
+### 2、TCP 粘包问题
 
->客户端在发送前会将短时间有多个发送的数据块缓冲到一起（发送端缓冲区），形成一个大的数据块一并发送，同样接收端也有一个接收端缓冲区，收到的数据先存放接收端缓冲区，然后程序从这里读取部分数据进行消费，以减少 I/O 消耗达到性能优化。
+> 客户端在发送前会将短时间有多个发送的数据块缓冲到一起（发送端缓冲区），形成一个大的数据块一并发送，同样接收端也有一个接收端缓冲区，收到的数据先存放接收端缓冲区，然后程序从这里读取部分数据进行消费，以减少 I/O 消耗达到性能优化。
 
-- TCP拥塞控制：TCP拥塞控制是传输控制协议(Transmission Control Protocol)避免网络拥塞的算法
+- TCP 拥塞控制：TCP 拥塞控制是传输控制协议(Transmission Control Protocol)避免网络拥塞的算法
 - 解决方案
   - 延迟发送：设置延迟发送，sleep 休眠一段时间的方式，简单但传输效率大大降低，对于交互频繁的场景显然不适用，仅使用于交互频率很低的场景。
   - 关闭 Nagle 算法：Nagle 算法能将网络中充斥的大量小的数据块集合起来一起发送减少网络拥堵，改善网络传输效率。在 Node.js 中可以设置 socket.setNoDelay() 方法来关闭 Nagle 算法，但对于粘包并不十分有效。
   - 封包/拆包：业界常用，使用长度编码的方式，通信双方约定好格式，将消息分为定长的消息头（Header）和不定长的消息体（Body），在解析时读取消息头获取到内容占用的长度，之后读取到的消息体内容字节数等于字节头的字节数时，认为其是一个完整的包。
+    | 消息头序号(Header) | 消息体长度 | 消息体 |
+    | :---: | --- | --- |
+    | 2 字节 | 2 字节 | N 字节 |
 
-| 消息头序号(Header) | 消息体长度 | 消息体 |
-|:-----: | ----- | ----- |
-| 2字节 | 2字节 | N字节 |
+## 八、DNS 域名解析
 
-## 八、DNS域名解析
-
->DNS 模块是基于 UDP 协议来实现的，在 Node.js 中我们可以通过 require('dns') 载入 DNS 实现域名的解析查询
+> DNS 模块是基于 UDP 协议来实现的，在 Node.js 中我们可以通过 require('dns') 载入 DNS 实现域名的解析查询
 
 ### 1、分类：Node.js DNS 模块分为两大类
 
 - 一是使用底层操作系统工具进行域名解析
 
-  ```js
-  const dns = require('dns');
-  //dns.lookup() 方法使用底层操作系统进行域名解析，是不需要经过任何网络通信
-  dns.lookup('nodejs.red', (err, address, family) => {
-      console.log('地址: %j 地址族: IPv%s', address, family);
-  });
-  //若本地 hosts 文件被修改过，dns.lookup() 会拿本地 hosts 文件的域名映射
-  ```
+```javascript
+const dns = require("dns");
+//dns.lookup() 方法使用底层操作系统进行域名解析，是不需要经过任何网络通信
+dns.lookup("nodejs.red", (err, address, family) => {
+  console.log("地址: %j 地址族: IPv%s", address, family);
+});
+//若本地 hosts 文件被修改过，dns.lookup() 会拿本地 hosts 文件的域名映射
+```
 
 - 二是链接到一个 DNS 网络服务器执行域名解析：除 dns.lookup() 之外的所有函数，都会连接到实际 DNS 服务器以执行名称解析
 
-  ```js
-  const dns = require('dns');
+```javascript
+const dns = require("dns");
 
-  dns.resolve('www.nodejs.red', (err, records) => {
-      console.log(records);
-  });
-  //使用 dns.resolve 即使修改 hosts 文件，也还是从外部读取正常的地址
-  ```
+dns.resolve("www.nodejs.red", (err, records) => {
+  console.log(records);
+});
+//使用 dns.resolve 即使修改 hosts 文件，也还是从外部读取正常的地址
+```
 
 ### 2、dns.lookup() 与 dns.resolve() 不同
 
 - 以异步 JavaScript 的角度来调用`dns.lookup()`，但在内部 libuv 底层线程池中却是同步的调用`getaddrinfo(3)`，可能造成 Node 进程阻塞
 - `dns.resolve()`没有使用`getaddrinfo(3)`，是通过网络执行的 DNS 查询，始终是保持异步不会对其它进程产生负面影响
 
-### 3、DNS解析过程及DNS本地解析
+### 3、DNS 解析过程及 DNS 本地解析
 
 - 浏览器 DNS 缓存 —> 系统（OS）缓存 -> 路由器缓存 -> ISP(互联网服务提供商) DNS 缓存
 - DNS 本地解析指的是 系统（OS）缓存 这一阶段，在浏览器 DNS 缓存未命中的情况下，会从本地系统的一个 hosts 文件寻找对应 IP
 
-## 九、Nodejs进阶
+## 九、Nodejs 进阶
 
-### 1、I/O模型
+### 1、I/O 模型
 
->每个设备都会有一个专用的 I/O 地址，用来处理自己的输入输出信息。一次 API 接口调用、向磁盘写入日志信息，其实就是在跟 I/O 打交道。一次 I/O 操作分为等待资源、使用资源两个阶段
+> 每个设备都会有一个专用的 I/O 地址，用来处理自己的输入输出信息。一次 API 接口调用、向磁盘写入日志信息，其实就是在跟 I/O 打交道。一次 I/O 操作分为等待资源、使用资源两个阶段
 
-- 阻塞与非阻塞I/O：操作系统内核等待资源阶段，根据发起 I/O 请求是否阻塞判断
-  - 阻塞I/O：一个用户进程发起一个 I/O 操作后，只有收到响应或超时才可处理其它。阻塞的这段时间对 CPU 资源是浪费的
-  - 非阻塞I/O：一个用户进程发起一个 I/O 操作后，若数据未就绪会立刻返回（标志数据资源不可用），此时 CPU 时间片可用来做一些其它事情
-- 同步与异步I/O：发生在使用资源阶段，根据实际 I/O 操作来判断
+- 阻塞与非阻塞 I/O：操作系统内核等待资源阶段，根据发起 I/O 请求是否阻塞判断
+  - 阻塞 I/O：一个用户进程发起一个 I/O 操作后，只有收到响应或超时才可处理其它。阻塞的这段时间对 CPU 资源是浪费的
+  - 非阻塞 I/O：一个用户进程发起一个 I/O 操作后，若数据未就绪会立刻返回（标志数据资源不可用），此时 CPU 时间片可用来做一些其它事情
+- 同步与异步 I/O：发生在使用资源阶段，根据实际 I/O 操作来判断
   - 同步 I/O：应用发送或接收数据后，如果不返回，继续等待（此处发生阻塞），直到数据成功或失败返回
-  - **异步I/O：应用发送或接收数据后立刻返回，数据写入 OS 缓存，由 OS 完成数据发送或接收，并返回成功或失败的信息给应用**
+  - **异步 I/O：应用发送或接收数据后立刻返回，数据写入 OS 缓存，由 OS 完成数据发送或接收，并返回成功或失败的信息给应用**
 - 用户空间与内核空间：操作系统将内存空间划分为用户空间、内核空间两部分
   - 用户空间：传输层之上为用户空间（Web 客户端、浏览器、FTP 这些都属于上三层）
   - 内核空间：传输层之下，如传输层的 TCP、UDP 协议对应到内核空间
-- I/O模型演进
+- I/O 模型演进
   - 同步阻塞 IO
   - 同步非阻塞 IO
   - **IO 多路复用**：多个网络 I/O 复用一个或少量的线程来处理 Socket
     - select：通过轮询，线性遍历检查在文件描述符上设置的标识位来判断
-    - poll：类似select，基于链表来实现，没有了最大链接 1024 的限制
+    - poll：类似 select，基于链表来实现，没有了最大链接 1024 的限制
     - **epoll**：linux 下效率最高的 I/O 事件通知机制，没有最大链接限制，通过 callbak 回调通知机制。Nginx 是基于 epoll 来实现高并发
-    - kqueue：与 epoll 类似，仅存于 FreeBSD（一种类UNIX操作系统）
+    - kqueue：与 epoll 类似，仅存于 FreeBSD（一种类 UNIX 操作系统）
   - 信号驱动 IO
   - **异步 IO 模型**：应用程序发起系统调用后无需等待直接返回当前调用状态，进行后续的其它任务，结果由内核完成 I/O 操作之后通过回调通知到我们的应用程序，中间没有阻塞过程
 
@@ -840,36 +835,121 @@ client.on('close', err => {
 ### 2、创建实例及监听端口
 
 - 引入包方法：`const express = require('express')`
-- 创建应用实例：`const app = express()`
-- 路由定义：`app.METHOD('/', (req, res) => {res.send()});`
-
-  ```js
-    app.get('/about', (req, res) => {res.send();});
-    app.put('/products/:id', async (req,res)=>{
-    const product = await Product.findById(req.params.id)
-    product.title = req.body.title
-    await product.save()
-    res.send(product)
-  })
-  ```
-
+- 创建应用实例：`const app = express();app.get('/', (req, res) => res.send('Hello World!'))`
 - 监听端口启动服务器：`app.listen(3000, () => {console.log('App listeningon port 3000!');});`
 
-### 3、静态文件托管、json 解析
+### 3、基本路由
+
+#### 3.1 路由定义：app.METHOD(PATH, HANDLER)
+
+有一个特殊的路由方法 app.all()，用于在路径上为所有 HTTP 请求方法加载中间件功能
+
+```javascript
+app.all("/secret", function (req, res, next) {
+  console.log("Accessing the secret section ...");
+  next(); // pass control to the next handler
+});
+```
+
+#### 3.2 路由处理器 HANDLER（含中间件）
+
+路由处理器可以采用**函数，函数数组或二者组合**的形式，如下所示
+
+```javascript
+app.get(
+  "/example/b",
+  function (req, res, next) {
+    console.log("the response will be sent by the next function ...");
+    next();
+  },
+  function (req, res) {
+    res.send("Hello from B!");
+  }
+);
+```
+
+#### 3.3 链式路由处理器：app.route()
+
+对于模块化的路由，建立链式路由处理器：
+
+```javascript
+app
+  .route("/book")
+  .get(function (req, res) {
+    res.send("Get a random book");
+  })
+  .post(function (req, res) {
+    res.send("Add a book");
+  })
+  .put(function (req, res) {
+    res.send("Update the book");
+  });
+```
+
+#### 3.4 创建模块化路由器：express.Router()
+
+路由器实例是一个完整的中间件和路由系统。 中间件的加载顺序很重要：首先加载的中间件功能也将首先执行。
+
+```javascript
+//birds.js
+const express = require("express");
+const router = express.Router({
+  mergeParams: true, //保留父路由器的req.params值，参数名称冲突则以子路由为准。
+});
+
+router.use(function timeLog(req, res, next) {
+  console.log("Time: ", Date.now());
+  next();
+});
+
+router.get("/", function (req, res) {
+  res.send("Birds home page");
+});
+
+router.get("/about", function (req, res) {
+  res.send("About birds");
+});
+
+module.exports = router;
+
+const birds = require("./birds");
+// app使用中间件(显示时间)，其加载顺序必须在最终 handler 之前，以便首先调用
+app.use("/birds", birds);
+```
+
+#### 3.5 可配置的中间件：app.use()
+
+要加载中间件，使用 app.use(HANDLER) 指定中间件函数。
+
+```javascript
+// my-middleware.js
+module.exports = function (options) {
+  return function (req, res, next) {
+    // Implement the middleware function based on the options object
+    next();
+  };
+};
+var mw = require("./my-middleware.js");
+app.use(mw({ option1: "1", option2: "2" }));
+```
+
+### 4、静态文件托管、json 解析
 
 - 新建 public 文件夹，放入资源文件如 index.html
-- 中间件默认使用根路径访问：`app.use('/',express.static('public'))`。以便管理路径可改为`/static`
+- 中间件默认使用相应路径访问
+  - `app.use('/uploads',express.static(__dirname + '/uploads'))`
+  - \_\_dirname 在 node 中可直接访问，表示当前运行文件的目录
 - 解析 json :`app.use(express.json())`
 
-### 4、CORS 跨域请求
+### 5、CORS 跨域请求
 
 - 安装跨域包:`npm i cors`
 - 引入使用：`app.use(require('cors')())`
 
-### 5、连接MongoDB
+### 6、连接 MongoDB
 
 - 安装包：`npm install mongoose`
-- 命令行启动mongoDB:`net start mongodb`
+- 命令行启动 mongoDB:`net start mongodb`
 - 创建实例：`const mongoose = require('mongoose');`
 - 连接数据库：`mongoose.connect('mongodb://localhost/test',{ useNewUrlParser: true,useUnifiedTopology: true })`
 - 建立数据模型：
@@ -878,16 +958,16 @@ client.on('close', err => {
 - 传入数据：`Product.insertMany([{title:'产品1'},{title:'产品2'}])`
 - 增删数据：
 
-```js
-app.post('/products', async (req,res)=>{
-  const product = await Product.create(req.body)
-  res.send(product)
-})
-app.delete('/products/:id',async (req,res)=>{
-  const product = await Product.findById(req.params.id)
-  await product.remove()
+```javascript
+app.post("/products", async (req, res) => {
+  const product = await Product.create(req.body);
+  res.send(product);
+});
+app.delete("/products/:id", async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  await product.remove();
   res.send({
-    success:true
-  })
-})
+    success: true,
+  });
+});
 ```

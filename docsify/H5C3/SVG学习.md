@@ -13,11 +13,11 @@
 - 位图：由像素点阵组成，定义区域内每个位置的颜色值。伸缩大小会失真
   - 压缩：分有损压缩和无损压缩。通过省略规则来省略位图中毫无意义的信息
   - 文件类型：`*.gif、*.jpg、*.tif`等
-  - 特点：位图“丢失肉眼难以发现的精度”以保证细节，色彩丰富
+  - 特点：大数据量即时渲染，保证细节，色彩丰富，适合实时数据可视化
 - 矢量图：通过路径和填充颜色来描述渲染。伸缩不失真，但表现力不如位图
   - 抽象：由点线面的抽象概念经人工或计算机测量、思考运算来转换生成
   - 文件类型：`SVG、*.dwg`等
-  - 特点：矢量图“丢失肉眼可见的细节”以保证精度，色彩单一
+  - 特点：大曲线表面保留渲染，保证精度，色彩单一，适合高保真打印查看
 - 视窗(`viewport`)：`<svg>`元素上使用 width 和 height 属性声明视窗尺寸，默认大小 300x150 px。视窗坐标系原点 (0,0) 在视窗左上角，X 轴正向右，Y 轴正向下。
 - 用户坐标系(`viewBox`)：4 个参数对应原点、宽高，其与视窗坐标系统宽高比相同时，会延伸适应整个视窗区域。不同时可用`preserveAspectRatio`属性声明
 
@@ -49,6 +49,7 @@ stroke="blue" stroke-width="5" rx="10" ry="10" />
 ```
 
 以上绘制原点为(0,0)且宽高为 200x150，填充色为透明，轮廓为蓝色宽为 5，圆角半径为 10 的矩形。
+
 rx、ry 属性指定圆角的 x、y 方位的半径
 
 ### 3. circle
@@ -108,8 +109,8 @@ polygon 和折线很像，都是由连接一组点集的直线构成。不同的
   - H\V：画水平线到 x\画垂直线到 y
   - Z：闭合路径，不区分大小写
   - A：圆弧 rx ry x-deg large-arc sweep-flag x y
-    - rx，ry 半径，x-deg x 轴旋转角度，large-arc大或小于180度(0小，1大)
-    - sweep-flag表示弧线方向(0逆时针，1顺时针)，x y为最终坐标
+    - rx，ry 半径，x-deg x 轴旋转角度，large-arc 大或小于 180 度(0 小，1 大)
+    - sweep-flag 表示弧线方向(0 逆时针，1 顺时针)，x y 为最终坐标
 
 ### \*贝塞尔曲线
 
@@ -167,7 +168,7 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 
 ### 1. g
 
-组合容器，添加到g元素上的属性、变换会应用到其所有的子元素上
+组合容器，添加到 g 元素上的属性、变换会应用到其所有的子元素上
 
 ```xml
 <g fill="red" transform="scale(2)">
@@ -194,11 +195,12 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 ### 3. pattern
 
 图案容器，defs 内部。被引用来平铺一个区域，对一个对象进行填充或描边。
-允许在一个pattern中的元素内，嵌入另一个pattern。
+
+允许在一个 pattern 中的元素内，嵌入另一个 pattern。
 
 - `patternUnits`：pattern 图案容器的几何属性 (x,y,width,height) 的坐标系
   - objectBoundingBox：默认值，相对于目标边界框的分值或百分比
-    - x、y的值乘以待填充区域相应宽高，即为实际起点坐标偏移量
+    - x、y 的值乘以待填充区域相应宽高，即为实际起点坐标偏移量
     - 1 除于 width、height 分值或百分比值，间接规定图案平铺的数量
   - userSpaceOnUse：相对于用户空间坐标系
     - x、y 表示的是相对于整个 svg 画布坐标系中的位置
@@ -206,9 +208,9 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 - `patternContentUnits`：pattern 内部图案内容对应的坐标系，控制其缩放和排布
   - userSpaceOnUse：默认值，内部元素的大小不因 pattern 的缩放而改变
   - objectBoundingBox：内部元素所有属性值作为比例，都依赖 pattern 的宽高
-    - 内部元素所有属性值若后不带百分号%，则都乘上100作为百分比数
-    - stroke-width默认值是1，若不指定数值，则按100%来计算撑满pattern
-  - 如果有viewBox属性，patternContentUnits属性将被忽略
+    - 内部元素所有属性值若后不带百分号%，则都乘上 100 作为百分比数
+    - stroke-width 默认值是 1，若不指定数值，则按 100%来计算撑满 pattern
+  - 如果有 viewBox 属性，patternContentUnits 属性将被忽略
 
 ```xml
 <defs>
@@ -221,18 +223,18 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 
 ### 4. linearGradient\radialGradient
 
-- linearGradient：线性渐变容器，defs内部
-  - gradientUnits：objectBoundingBox(默认值)、userSpaceOnUse两参数
-  - x1,y1设置渐变线的起始坐标，x2,y2设置终点坐标
-- radialGradient：径向渐变容器，defs内部。附加属性默认 cx,cy,fx,fy,r 都是50%
-  - 中心点：cx,cy设置渐变终点 offset="100%"时圆心位置，r 设置终点渐变半径
+- linearGradient：线性渐变容器，defs 内部
+  - gradientUnits：objectBoundingBox(默认值)、userSpaceOnUse 两参数
+  - x1,y1 设置渐变线的起始坐标，x2,y2 设置终点坐标
+- radialGradient：径向渐变容器，defs 内部。附加属性默认 cx,cy,fx,fy,r 都是 50%
+  - 中心点：cx,cy 设置渐变终点 offset="100%"时圆心位置，r 设置终点渐变半径
   - 焦点：fx,fy 设置渐变起点 offset="0"时圆心位置
-- `<stop>`元素来定义渐变的关键点。可以设置多个stop元素
-  - offset：属性值范围为0%~100%，或0~1.0。0渐变线起始位置，1终点位置
+- `<stop>`元素来定义渐变的关键点。可以设置多个 stop 元素
+  - offset：属性值范围为 0%1.0。0 渐变线起始位置，1 终点位置
   - stop-color：设置关键点处的颜色
   - stop-opacity：设置关键点处的透明度
 - spreadMethod：控制当渐变到达终点，对象尚未被填充颜色的填色方式
-  - pad：默认属性值。以相应`<stop>`的stop-color填充
+  - pad：默认属性值。以相应`<stop>`的 stop-color 填充
   - repeat：以重复的方式填充超出部分。
   - reflect：以镜像的方式填充超出部分
 - gradientTransform：渐变形变属性，同 SVG 的 transform
@@ -289,7 +291,7 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 
 图形模板容器，可用`<use>`元素实例化。在同一文档中多次使用，添加结构和语义
 
-- symbol元素本身是不呈现的。只有symbol元素的实例才能呈现。
+- symbol 元素本身是不呈现的。只有 symbol 元素的实例才能呈现。
 
 ```xml
 <symbol id="sym01" viewBox="0 0 150 110">
@@ -334,7 +336,7 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 
 ### 9. foreignObject
 
-允许包含不同的XML命名空间即 xmlns。常用将 HTML 文本嵌入 SVG。
+允许包含不同的 XML 命名空间即 xmlns。常用将 HTML 文本嵌入 SVG。
 
 ```xml
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -363,7 +365,7 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
     - miter：默认值，方形连接，形成尖角
     - round：圆角连接，实现平滑效果
     - bevel：斜角连接，形成斜接
-  - stroke-miterlimit：值为角长度比上线宽，超过该值则切割掉，配合linejoin
+  - stroke-miterlimit：值为角长度比上线宽，超过该值则切割掉，配合 linejoin
   - **stroke-dasharray：虚线类型**。参数为一组用逗号分割的数字组成的数列
     - 第一个用来表示填色区域的长度，如 5
     - 第二个用来表示非填色区域的长度，如 10
@@ -384,8 +386,8 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 - `preserveAspectRatio="<align> [<meetOrSlice>]"`表示是否强制保留宽高比
 - 除 `<image>` 元素外，只适用于提供属性 viewBox 的元素，否则忽略
   - align：是否强制保留宽高比，viewBox、viewport 宽高比不一致时使用
-    - none表示，不强制保留宽高比，viewBox 内容拉伸铺满 viewport
-    - xMinYMin|xMidYMin|...：强制保留长宽比，viewBox如何与viewport对齐
+    - none 表示，不强制保留宽高比，viewBox 内容拉伸铺满 viewport
+    - xMinYMin|xMidYMin|...：强制保留长宽比，viewBox 如何与 viewport 对齐
   - meetOrSlice：meet(默认)|slice，可选参数，类似背景属性 contain，cover
     - meet：保留长宽比，缩放 viewBox 在视图范围内可见，比 viewport 小
     - slice：保留长宽比，放大 viewbox 到覆盖可视区域，比 viewport 大
@@ -418,10 +420,10 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
   - stroke-dasharray：定义 dash 和 gap 的长度
   - stroke-dashoffset: 定义其实 dash 线条开始的位置
 - 原理：dasharray 将 dash 隐藏再增至全长。dashoffset 移动原点
-  - 创建3 个 text 重叠，stroke-width设置宽度，offset设置为0，gap设置足够大
+  - 创建 3 个 text 重叠，stroke-width 设置宽度，offset 设置为 0，gap 设置足够大
   - 通过 nth-child 选择器，设置各文本不同的 stroke 颜色值，animation
-  - @keframes中的100%处，设置 dashoffset\dasharray 错开 dash 长度
-  
+  - @keframes 中的 100%处，设置 dashoffset\dasharray 错开 dash 长度
+
 ### 2. 边框动画
 
 ```xml
@@ -434,12 +436,25 @@ use 用于复制一个形状，可取得目标节点并在别的地方复制它�
 ```
 
 ```css
-svg line { stroke-width: 10; stroke: #000; fill: none;
-  stroke-dasharray: 200; transition: transform .6s ease-out; }
-svg:hover line.top { transform: translateX(-400px); }
-svg:hover line.bottom { transform: translateX(400px); }
-svg:hover line.left { transform: translateY(400px); }
-svg:hover line.right { transform: translateY(-400px); }
+svg line {
+  stroke-width: 10;
+  stroke: #000;
+  fill: none;
+  stroke-dasharray: 200;
+  transition: transform 0.6s ease-out;
+}
+svg:hover line.top {
+  transform: translateX(-400px);
+}
+svg:hover line.bottom {
+  transform: translateX(400px);
+}
+svg:hover line.left {
+  transform: translateY(400px);
+}
+svg:hover line.right {
+  transform: translateY(-400px);
+}
 ```
 
 ### 3. 沿 SVG 路径的动画对象
@@ -458,14 +473,41 @@ svg:hover line.right { transform: translateY(-400px); }
 ```
 
 ```css
-svg { width: 300px; display: block; position: absolute; }
-.ball { width: 10px; height: 10px; background-color: red;border-radius: 50%;
-  offset-path: path('M10 80 Q 77.5 10, 145 80 T 280 80');
+svg {
+  width: 300px;
+  display: block;
+  position: absolute;
+}
+.ball {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  offset-path: path("M10 80 Q 77.5 10, 145 80 T 280 80");
   offset-distance: 0%;
-  animation: red-ball 2s linear alternate infinite; }
+  animation: red-ball 2s linear alternate infinite;
+}
 
 @keyframes red-ball {
-  from { offset-distance: 0%; }
-  to { offset-distance: 100%; }
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
 }
 ```
+
+## 7、作为图标的特点
+
+### 1.  使用 aria-hidden 属性
+
+aria-hidden 属性可以用来控制一系列可访问 API 中的非交互内容的显示或隐藏。可以把该元素和它的所有子元素从可访问性树上移除：`<i class="icon" aria-hidden="true" />`
+
+### 2. 封装组件
+
+- 导入或下载 .svg 文件，默认 vue-cli 对 svg 使用 `url-loader`  进行处理
+- 使用  webpack loader **svg-sprite-loader** ，将多个 svg 打包成  `svg-sprite`，其使用 symbol 元件作为图标容器，use 元素 xlink:href 属性调用对应其 id
+- 使用 webpack 的 **exclude、include**，让`svg-sprite-loader`只处理指定文件夹下面的 svg，`url-loaer`只处理除此文件夹之外的所有 svg
+- 使用到 webpack 的 **require.context**  自动导入相应文件模块
+- 使用** SVGO **优化处理 SVG 文件中大量的无用信息
