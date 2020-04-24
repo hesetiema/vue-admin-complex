@@ -1,0 +1,46 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './sidebar.scss';
+@import './transtion.scss';
+
+html,body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#app{
+  height:100%;
+}
+
+.app-wrapper {
+  @include clearfix;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+a,
+a:focus,
+a:hover,
+a:active,
+a:visited {
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.block {
+  display: block;
+}
+
+.inlineBlock {
+  display: inline-block;
+}
+
+
+
+
+

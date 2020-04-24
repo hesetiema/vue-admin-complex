@@ -1,88 +1,155 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
-import Layout from '@/layout'
+import Layout from "@/layout/index";
 
-export const constantRoutes=[
+export const routes = [
   {
-    path: '/login',
-    name: 'Login',
-    hidden:true,
-    component: () => import('@/views/login/index')
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/login/index"),
+    meta: { isPublic: true, hidden: true },
   },
   {
-    path: '/',
-    component:Layout,
-    redirect:'/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
+    path: "/404",
+    name: "404page",
+    component: () => import("@/views/error-page/404"),
+    meta: { isPublic: true, hidden: true },
   },
   {
-    path: '/404',
-    name: '404page',
-    hidden:true,
-    component: () => import('@/views/error-page/404')
-  },
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
-  {
-    path: 'external-link',
+    path: "/",
+    name: "Layout",
     component: Layout,
+    meta: { isPublic: true },
+    redirect: "/dashboard",
     children: [
       {
-        path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'External Link', icon: 'link',roles:'admin' }
-      }
-    ]
+        path: "dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/index"),
+        meta: { isPublic: true, title: "Dashboard", icon: "dashboard" },
+      },
+    ],
   },
   {
-    path: '/error',
+    path: "/example",
+    name: "Example",
     component: Layout,
-    redirect: 'noRedirect',
-    name: 'ErrorPages',
-    meta: {
-      title: 'Error Pages',
-      icon: '404'
-    },
+    meta: { isPublic: true, title: "Example", icon: "example" },
+    redirect: "/example/table",
     children: [
       {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: '404', noCache: true }
-      }
-    ]
+        path: "table",
+        name: "Table",
+        component: () => import("@/views/example/table/index"),
+        meta: { isPublic: true, title: "Table", icon: "table" },
+      },
+      {
+        path: "tree",
+        name: "Tree",
+        component: () => import("@/views/example/tree/index"),
+        meta: { isPublic: true, title: "Tree", icon: "tree" },
+      },
+    ],
   },
-  
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  {
+    path: "/form",
+    component: Layout,
+    meta: { isPublic: true },
+    redirect: "/form/index",
+    children: [
+      {
+        path: "index",
+        name: "Form",
+        component: () => import("@/views/form/index"),
+        meta: { isPublic: true, title: "Form", icon: "form" },
+      },
+    ],
+  },
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+  {
+    path: "/nested",
+    name: "Nested",
+    component: Layout,
+    meta: { isPublic: true, title: "Nested", icon: "nested" },
+    redirect: "/nested/menu1",
+    children: [
+      {
+        path: "menu1",
+        name: "Menu1",
+        component: () => import("@/views/nested/menu1/index"),
+        meta: { isPublic: true, title: "Menu1", icon: "menu" },
+        children: [
+          {
+            path: "menu1-1",
+            name: "Menu1-1",
+            component: () => import("@/views/nested/menu1/menu1-1/index"),
+            meta: { isPublic: true, title: "Menu1-1", icon: "" },
+          },
+          {
+            path: "menu1-2",
+            name: "Menu1-2",
+            component: () => import("@/views/nested/menu1/menu1-2/index"),
+            meta: { isPublic: true, title: "Menu1-2", icon: "" },
+            children: [
+              {
+                path: "menu1-2-1",
+                name: "Menu1-2-1",
+                component: () =>
+                  import("@/views/nested/menu1/menu1-2/menu1-2-1/index"),
+                meta: { isPublic: true, title: "Menu1-2-1", icon: "" },
+              },
+              {
+                path: "menu1-2-2",
+                name: "Menu1-2-2",
+                component: () =>
+                  import("@/views/nested/menu1/menu1-2/menu1-2-2/index"),
+                meta: { isPublic: true, title: "Menu1-2-2", icon: "" },
+              },
+            ],
+          },
+          {
+            path: "menu1-3",
+            name: "Menu1-3",
+            component: () => import("@/views/nested/menu1/menu1-3/index"),
+            meta: { isPublic: true, title: "Menu1-3", icon: "" },
+          },
+        ],
+      },
+      {
+        path: "menu2",
+        name: "Menu2",
+        component: () => import("@/views/nested/menu2/index"),
+        meta: { isPublic: true, title: "Menu2", icon: "menu" },
+      },
+    ],
+  },
+  {
+    path: "external-link",
+    component: Layout,
+    meta: { isPublic: true },
+    children: [
+      {
+        path: "https://www.yuque.com/yeyuzhufeng/kb",
+        meta: { isPublic: true, title: "External Link", icon: "link" },
+      },
+    ],
+  },
+  { path: '*', redirect: '/404', meta: { isPublic: true, hidden: true } }
+];
 
-const router = createRouter()
+const router = new Router({
+  routes,
+});
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
-}
+router.beforeEach((to, from, next) => {
+  if (!to.meta.isPublic && !localStorage.token) {
+    return next("/login");
+  }else{
+    next();
+  }
+});
 
-export default router
+export default router;

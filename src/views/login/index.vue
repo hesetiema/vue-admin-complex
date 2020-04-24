@@ -47,44 +47,35 @@
         </el-form-item>
       </el-tooltip>
 
-      <div class="form-items_tips">
-        <a href="toLogin" class="forget-password">忘记密码？</a>|
-        <a
-          href="#"
-          @click.prevent="resetForm('loginForm')"
-          class="reset-password"
-          >重置密码</a
-        >
-      </div>
-
       <el-button
         class="form-items_submit"
         type="primary"
         :loading="loading"
         @click.native.prevent="submitForm('loginForm')"
-        >Login</el-button
-      >
-
+      >Login</el-button>
+      <el-footer style="margin-top:2rem;color:grey">用户名：admin；密码：123456</el-footer>
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
+import { login } from "@/api/user.js";
+import {setToken} from "@/utils/auth.js";
 
 export default {
   name: "Login",
   data() {
+    //element 自定义校验规则(表单字段)
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+      if (value.length === 0) {
+        callback(new Error("请输入用户名"));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error("密码不得少于6位"));
       } else {
         callback();
       }
@@ -94,6 +85,7 @@ export default {
         username: "admin",
         password: "123456"
       },
+      //rules属性传入校验规则，props属性为需校验字段名
       loginRules: {
         username: [
           { required: true, trigger: "blur", validator: validateUsername }
@@ -102,24 +94,9 @@ export default {
           { required: true, trigger: "blur", validator: validatePassword }
         ]
       },
-      passwordType: "password",
       capsTooltip: false,
-      loading: false,
-      redirect: undefined,
-      otherQuery: {}
+      loading: false
     };
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        const query = route.query;
-        if (query) {
-          this.redirect = query.redirect;
-          this.otherQuery = this.getOtherQuery(query);
-        }
-      },
-      immediate: true
-    }
   },
   mounted() {
     if (this.loginForm.username === "") {
@@ -148,13 +125,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch("user/login", this.loginForm)
-            .then(() => {
-              alert("ok");
-              this.$router.push({
-                path: this.redirect || '/',
-                query: this.otherQuery
-              });
+          login(this.loginForm)
+            .then(res => {
+              const {data} = res
+              setToken(data.token);
+              this.$router.push("/");
               this.loading = false;
             })
             .catch(err => {
@@ -166,17 +141,6 @@ export default {
           return false;
         }
       });
-    },
-    getOtherQuery(query) {
-      return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== "redirect") {
-          acc[cur] = query[cur];
-        }
-        return acc;
-      }, {});
-    },
-    resetForm() {
-      this.$refs.loginForm.resetFields();
     }
   }
 };
@@ -229,13 +193,6 @@ $border-color: rgba(255, 255, 255, 0.9);
     width: 21rem;
     display: flex;
     justify-content: center;
-  }
-  .form-items_tips {
-    height: 1.5rem;
-    margin: 1rem 0;
-    a {
-      color: $font-color;
-    }
   }
   .form-items_submit {
     width: 20rem;
