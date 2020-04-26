@@ -81,6 +81,7 @@ export const routes = [
         name: "Menu1",
         component: () => import("@/views/nested/menu1/index"),
         meta: { isPublic: true, title: "Menu1", icon: "menu" },
+        redirect:"/nested/menu1/menu1-1",
         children: [
           {
             path: "menu1-1",

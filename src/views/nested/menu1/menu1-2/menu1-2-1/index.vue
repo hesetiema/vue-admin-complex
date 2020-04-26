@@ -1,13 +1,10 @@
 <template>
-  <div>this is menu1-2-1</div>
+  <el-alert :closable="false" title="menu 1-2-1" type="error" style="padding:30px"></el-alert>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>

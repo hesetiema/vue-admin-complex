@@ -67,6 +67,7 @@
         </transition>
       </el-main>
     </el-container>
+
   </el-container>
 </template>
 
@@ -163,11 +164,10 @@ export default {
 }
 
 .sidebar-title {
-  display: inline-block;
   line-height: 3rem;
   font-weight: normal;
   margin: 0;
-  vertical-align: middle;
+  text-align: center;
 }
 
 .main-container {

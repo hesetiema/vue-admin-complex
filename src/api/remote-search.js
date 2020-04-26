@@ -8,10 +8,31 @@ export function searchUser(name) {
   })
 }
 
-export function transactionList(query){
+export function transactionsList(){
   return request({
-    url:'/transaction/list',
+    url:'rest/transactions',
     method:'get',
-    params: query
+  })
+}
+
+export function createTransaction(data){
+  return request({
+    url:'rest/transactions',
+    method:'post',
+    data
+  })
+}
+export function updateTransaction(id,data){
+  return request({
+    url:`rest/transactions/${id}`,
+    method:'put',
+    data
+  })
+}
+
+export function deleteTransaction(id){
+  return request({
+    url:`rest/transactions/${id}`,
+    method:'delete',
   })
 }

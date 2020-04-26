@@ -159,6 +159,7 @@ $border-color: rgba(255, 255, 255, 0.9);
   overflow: hidden;
   color: $font-color;
   background: $bgd-color;
+  text-align: center;
 
   .login-form {
     box-sizing: border-box;
