@@ -8,6 +8,14 @@ npm install
 
 ### Compiles and hot-reloads for development
 
+- admin path  "./package.json"
+
+```node
+npm run serve
+```
+
+- server path "./server/package.json"
+
 ```node
 npm run serve
 ```
