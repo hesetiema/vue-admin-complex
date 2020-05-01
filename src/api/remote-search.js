@@ -1,13 +1,5 @@
 import request from '@/utils/request'
 
-export function searchUser(name) {
-  return request({
-    url: '/search/user',
-    method: 'get',
-    params: { name }
-  })
-}
-
 export function transactionsList(){
   return request({
     url:'rest/transactions',
@@ -22,6 +14,14 @@ export function createTransaction(data){
     data
   })
 }
+
+export function getTransaction(id){
+  return request({
+    url:`rest/transactions/${id}`,
+    method:'get',
+  })
+}
+
 export function updateTransaction(id,data){
   return request({
     url:`rest/transactions/${id}`,

@@ -4,7 +4,7 @@ import { Message} from 'element-ui' // 引用element-ui的消息提示组件
 import {getToken} from '@/utils/auth.js'
 
 const service = axios.create({
-  timeout: 30000,
+  timeout: 10000,
   baseURL: 'http://localhost:3000/dev-api'
 })
 
@@ -26,16 +26,24 @@ service.interceptors.response.use(
     return res
   },
   err => {
-    if (err.response.data.message) {
+    if(err.response){
+      if (err.response.status === 401) {
+        router.push('/login')
+      }
       Message({
-        type: "error",
-        message: err.response.data.message,
-        duration: 5 * 1000
+        type:"error",
+        message: err.response.data || err.response.status || err.response.headers
       })
-    }
-  
-    if (err.response.status === 401) {
-      router.push('/login')
+    }else if (err.request) {
+      Message({
+        type:"error",
+        message: err.request
+      })
+    } else {
+      Message({
+        type:"error",
+        message: err.message
+      })
     }
     return Promise.reject(err)
   }
