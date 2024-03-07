@@ -1,6 +1,7 @@
 <script setup>
 import HeaderView from './HeaderView.vue'
 import AsideView from './AsideView.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
@@ -14,17 +15,19 @@ import AsideView from './AsideView.vue'
         <el-aside width="200px">
           <AsideView />
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <RouterView></RouterView>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <style scoped>
-.common-layout-container{
+.common-layout-container {
   height: 100vh;
 }
-.common-layout{
+.common-layout {
   height: 100%;
 }
 .el-header {

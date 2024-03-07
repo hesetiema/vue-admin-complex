@@ -1,9 +1,15 @@
 <script setup>
 import DropDownList from './DropDownList.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const dropdownLists = [
   {
-    title: '查看详情'
+    title: '退出登录',
+    onClick: () => {
+      router.push('/')
+    }
   }
 ]
 </script>

@@ -30,7 +30,7 @@ const dropdownItems = ref(props.list)
     <template #dropdown>
       <el-dropdown-menu>
         <template v-for="item in dropdownItems" :key="item.title">
-          <el-dropdown-item :disabled="item.disabled">
+          <el-dropdown-item :disabled="item.disabled" @click="item.onClick">
             {{ item.title }}
           </el-dropdown-item>
         </template>
