@@ -1,11 +1,18 @@
 <script lang="ts" setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const toHome = () => {
+  router.push('/')
+}
+
 </script>
 
 <template>
   <header>
     <div class="wrapper">
-      <div class="logo-container">
+      <div class="logo-container" @click="toHome">
         <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="32" height="32" />
         <span class="title">Vue Admin Complex</span>
       </div>
@@ -32,6 +39,7 @@ import { RouterLink, RouterView } from 'vue-router';
 .logo-container {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .logo {
@@ -50,5 +58,11 @@ nav {
   display: flex;
   align-items: center;
   column-gap: 2rem;
+
+  & a {
+    outline: none;
+    text-decoration: none;
+    color: black
+  }
 }
 </style>

@@ -32,5 +32,9 @@ import { RouterView } from 'vue-router'
 }
 .el-header {
   padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: #fff;
 }
 </style>

@@ -1,106 +1,101 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue'
+import { reactive, markRaw } from 'vue'
+import { Histogram, Menu as IconMenu, ElementPlus, Setting } from '@element-plus/icons-vue'
+import type { ComponentPublicInstance } from 'vue'
+import { useRoute } from 'vue-router'
 
-interface ISubMenuItem {
-  groupTitle?: string
-  children?: IMenuItem[]
-  title?: string
-  key?: string
-}
-
-interface IMenuItem {
+interface IItemBase {
   title: string
   key: string
-  icon?: () => any
+}
+
+interface ISubMenuItem extends Partial<IItemBase> {
+  groupTitle?: string
+  children?: IItemBase[]
+  icon?: ComponentPublicInstance
+}
+
+interface IMenuItem extends IItemBase {
+  icon?: ComponentPublicInstance
   children?: ISubMenuItem[]
   disabled?: boolean
 }
 
+const rawComponent = (myComponent) => markRaw(myComponent);
 const menuItems: IMenuItem[] = reactive([
   {
+    title: 'DashBoard',
+    icon: rawComponent(Histogram),
+    key: 'index',
+  },
+  {
     title: '组件',
-    icon: Location,
-    key: '1',
+    icon: rawComponent(ElementPlus),
+    key: 'component',
     children: [
       {
         groupTitle: '列表',
         children: [
-          { title: '普通列表', key: '1-1' },
+          { title: '普通列表', key: 'base-table', },
           {
-            title: '虚拟列表',
-            key: '1-2'
+            title: '高级列表',
+            key: 'advanced-table',
           }
         ]
       },
       {
         groupTitle: '表单',
         children: [
-          { title: '普通表单', key: '1-3' },
+          { title: '普通表单', key: 'base-form' },
           {
             title: '嵌套表单',
-            key: '1-4'
+            key: 'nested-form'
           }
         ]
       },
       {
         title: '文件上传',
-        key: '1-5'
+        key: 'file-upload'
       },
       {
         title: '文本省略',
-        key: '1-6'
+        key: 'text-ellipsis'
       },
       {
         title: '图片裁剪',
-        key: '1-7'
+        key: 'img-crop'
       }
     ]
   },
   {
     title: '常用功能',
-    icon: IconMenu,
+    icon: rawComponent(IconMenu),
     key: '2',
     children: [
       {
         title: '水印',
-        key: '2-1'
+        key: 'watermark'
       },
       {
         title: '音乐播放器',
-        key: '2-2'
+        key: 'player'
       }
     ]
   },
   {
-    title: '导航三',
-    icon: Document,
-    key: '3',
-    disabled: true
-  },
-  {
-    title: '导航四',
-    icon: Setting,
-    key: '4'
+    title: '其他功能',
+    icon: rawComponent(Setting),
+    key: 'other-func'
   }
 ])
 
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+const route = useRoute()
+
 </script>
 
 <template>
   <div class="aside-container">
-    <el-menu
-      default-active="2"
-      class="el-menu-vertical-aside"
-      @open="handleOpen"
-      @close="handleClose"
-    >
+    <el-menu :default-active="route.name" router unique-opened class="el-menu-vertical-aside">
       <template v-for="menu in menuItems" :key="menu.key">
         <el-sub-menu :index="menu.key" :disabled="menu.disabled" v-if="menu?.children?.length">
           <template #title>
