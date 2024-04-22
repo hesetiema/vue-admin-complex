@@ -53,7 +53,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'advanced-table',
         name: 'advanced-table',
-        component: () => import('@/views/admin/TableBase.vue')
+        component: () => import('@/views/admin/TableAdvanced.vue')
       },
       {
         path: 'base-form',
