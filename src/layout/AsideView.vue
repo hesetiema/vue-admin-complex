@@ -21,12 +21,12 @@ interface IMenuItem extends IItemBase {
   disabled?: boolean
 }
 
-const rawComponent = (myComponent) => markRaw(myComponent);
+const rawComponent = (myComponent) => markRaw(myComponent)
 const menuItems: IMenuItem[] = reactive([
   {
     title: 'DashBoard',
     icon: rawComponent(Histogram),
-    key: 'index',
+    key: 'index'
   },
   {
     title: '组件',
@@ -36,10 +36,10 @@ const menuItems: IMenuItem[] = reactive([
       {
         groupTitle: '列表',
         children: [
-          { title: '普通列表', key: 'base-table', },
+          { title: '普通列表', key: 'base-table' },
           {
             title: '高级列表',
-            key: 'advanced-table',
+            key: 'advanced-table'
           }
         ]
       },
@@ -90,12 +90,16 @@ const menuItems: IMenuItem[] = reactive([
 ])
 
 const route = useRoute()
-
 </script>
 
 <template>
   <div class="aside-container">
-    <el-menu :default-active="route.name" router unique-opened class="el-menu-vertical-aside">
+    <el-menu
+      :default-active="route.name?.toString()"
+      router
+      unique-opened
+      class="el-menu-vertical-aside"
+    >
       <template v-for="menu in menuItems" :key="menu.key">
         <el-sub-menu :index="menu.key" :disabled="menu.disabled" v-if="menu?.children?.length">
           <template #title>

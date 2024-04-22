@@ -27,9 +27,16 @@ import { RouterView } from 'vue-router'
 .common-layout-container {
   height: 100vh;
 }
+
 .common-layout {
   height: 100%;
 }
+
+.el-main {
+  padding: 24px;
+  background-color: #f7f6fa;
+}
+
 .el-header {
   padding: 0;
   position: sticky;
