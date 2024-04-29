@@ -4,6 +4,8 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import TableAdvancedCommon from './TableAdvancedCommon.vue'
+import TableAdvancedVirtualList from './TableAdvancedVirtualList.vue'
+import TableAdvancedEditList from './TableAdvancedEditList.vue'
 
 // 更改分页文字
 zhCn.el.pagination.total = '共 {total} 条'
@@ -31,11 +33,18 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     </div>
     <ElConfigProvider :locale="zhCn">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="分页+加载中动画+空数据渲染" name="first">
+        <el-tab-pane label="分页+加载中动画" name="first">
           <TableAdvancedCommon />
         </el-tab-pane>
-        <el-tab-pane label="虚拟化列表" name="second">虚拟化列表</el-tab-pane>
-        <el-tab-pane label="单元格编辑" name="third">单元格编辑</el-tab-pane>
+        <el-tab-pane label="空数据渲染" name="second">
+          <TableAdvancedCommon :list="[]" :hidePage="true" />
+        </el-tab-pane>
+        <el-tab-pane label="虚拟化列表" name="third">
+          <TableAdvancedVirtualList />
+        </el-tab-pane>
+        <el-tab-pane label="单元格编辑" name="fourth">
+          <TableAdvancedEditList />
+        </el-tab-pane>
       </el-tabs>
     </ElConfigProvider>
   </div>
@@ -48,12 +57,5 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 
 .intro {
   margin-bottom: 24px;
-}
-
-.el-empty {
-  --el-empty-padding: 12px 0;
-  --el-empty-image-width: 100px;
-  --el-empty-bottom-margin-top: 0px;
-  --el-empty-description-margin-top: 12px;
 }
 </style>

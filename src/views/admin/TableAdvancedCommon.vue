@@ -11,7 +11,12 @@ interface Item {
   zip: string
 }
 
-const tableData = [
+const props = defineProps<{
+  list?: Item[]
+  hidePage?: boolean
+}>()
+
+const mockTableData = [
   {
     date: '2016-05-03',
     name: 'Tom',
@@ -82,6 +87,8 @@ const tableData = [
   }
 ]
 
+const tableData = props?.list ?? mockTableData
+
 const filterHandler = (value: string, row: Item, column: TableColumnCtx<Item>) => {
   const property = column['property']
   return row[property] === value
@@ -149,6 +156,7 @@ onMounted(() => {
     </el-table-column>
   </el-table>
   <el-pagination
+    v-if="!props.hidePage"
     v-model:current-page="currentPage"
     v-model:page-size="pageSize"
     :page-sizes="[100, 200, 300, 400]"
@@ -163,5 +171,11 @@ onMounted(() => {
 .el-pagination {
   justify-content: flex-end;
   padding-top: 16px;
+}
+.el-empty {
+  --el-empty-padding: 12px 0;
+  --el-empty-image-width: 100px;
+  --el-empty-bottom-margin-top: 0px;
+  --el-empty-description-margin-top: 12px;
 }
 </style>
