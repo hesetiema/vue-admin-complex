@@ -3,6 +3,7 @@ import { reactive, markRaw, ref, onMounted, onUnmounted } from 'vue'
 import { Histogram, Menu as IconMenu, ElementPlus, Setting } from '@element-plus/icons-vue'
 import type { ComponentPublicInstance } from 'vue'
 import { useRoute } from 'vue-router'
+import { useCollapseStore } from '@/stores/collapse'
 
 interface IItemBase {
   title: string
@@ -48,8 +49,8 @@ const menuItems: IMenuItem[] = reactive([
         children: [
           { title: '普通表单', key: 'base-form' },
           {
-            title: '嵌套表单',
-            key: 'nested-form'
+            title: '高级表单',
+            key: 'advanced-form'
           }
         ]
       },
@@ -91,11 +92,16 @@ const menuItems: IMenuItem[] = reactive([
 
 const route = useRoute()
 const isCollapse = ref(true)
+const store = useCollapseStore()
+
 const toggleCollapse = (flag?: boolean) => {
   if (typeof flag === 'boolean') {
     isCollapse.value = flag
+    store.switch(flag)
   } else {
-    isCollapse.value = !isCollapse.value
+    const newVal = !isCollapse.value
+    isCollapse.value = newVal
+    store.switch(newVal)
   }
 }
 
@@ -117,55 +123,67 @@ onUnmounted(() => {
 
 <template>
   <div class="aside-container">
-    <el-menu
-      :default-active="route.name?.toString()"
-      :collapse="isCollapse"
-      router
-      class="aside-menu-vertical"
+    <el-scrollbar
+      class="aside-menu-container"
+      :wrap-style="{ width: store.collapse ? '64px' : 'auto' }"
+      height="100%"
     >
-      <template v-for="menu in menuItems" :key="menu.key">
-        <el-sub-menu :index="menu.key" :disabled="menu.disabled" v-if="menu?.children?.length">
-          <template #title>
+      <el-menu
+        :default-active="route.name?.toString()"
+        :collapse="isCollapse"
+        router
+        class="aside-menu-vertical"
+        :collapse-transition="false"
+      >
+        <template v-for="menu in menuItems" :key="menu.key">
+          <el-sub-menu
+            :index="menu.key"
+            :disabled="menu.disabled"
+            v-if="menu?.children?.length"
+            :teleported="true"
+          >
+            <template #title>
+              <el-icon v-if="menu?.icon">
+                <component :is="menu?.icon" />
+              </el-icon>
+              <span>{{ menu.title }}</span>
+            </template>
+
+            <template v-for="submenu in menu.children" :key="submenu?.key || submenu?.groupTitle">
+              <el-menu-item-group :title="submenu?.groupTitle" v-if="submenu?.groupTitle">
+                <template v-if="submenu?.children?.length">
+                  <template v-for="child in submenu.children" :key="child?.key">
+                    <el-menu-item :index="child.key">{{ child.title }}</el-menu-item>
+                  </template>
+                </template>
+                <el-menu-item :index="submenu.key" v-else>{{ submenu.title }}</el-menu-item>
+              </el-menu-item-group>
+
+              <el-sub-menu :index="submenu?.key" v-else-if="submenu?.children?.length">
+                <template #title>{{ submenu?.title }}</template>
+
+                <template v-for="child in submenu.children" :key="child?.key">
+                  <el-menu-item :index="child.key">{{ child.title }}</el-menu-item>
+                </template>
+              </el-sub-menu>
+
+              <el-menu-item :index="submenu?.key" v-else>
+                <el-icon v-if="submenu?.icon">
+                  <component :is="submenu?.icon" />
+                </el-icon>
+                <span>{{ submenu?.title }}</span>
+              </el-menu-item>
+            </template>
+          </el-sub-menu>
+          <el-menu-item :index="menu.key" :disabled="menu.disabled" v-else>
             <el-icon v-if="menu?.icon">
               <component :is="menu?.icon" />
             </el-icon>
             <span>{{ menu.title }}</span>
-          </template>
-
-          <template v-for="submenu in menu.children" :key="submenu?.key || submenu?.groupTitle">
-            <el-menu-item-group :title="submenu?.groupTitle" v-if="submenu?.groupTitle">
-              <template v-if="submenu?.children?.length">
-                <template v-for="child in submenu.children" :key="child?.key">
-                  <el-menu-item :index="child.key">{{ child.title }}</el-menu-item>
-                </template>
-              </template>
-              <el-menu-item :index="submenu.key" v-else>{{ submenu.title }}</el-menu-item>
-            </el-menu-item-group>
-
-            <el-sub-menu :index="submenu?.key" v-else-if="submenu?.children?.length">
-              <template #title>{{ submenu?.title }}</template>
-
-              <template v-for="child in submenu.children" :key="child?.key">
-                <el-menu-item :index="child.key">{{ child.title }}</el-menu-item>
-              </template>
-            </el-sub-menu>
-
-            <el-menu-item :index="submenu?.key" v-else>
-              <el-icon v-if="submenu?.icon">
-                <component :is="submenu?.icon" />
-              </el-icon>
-              <span>{{ submenu?.title }}</span>
-            </el-menu-item>
-          </template>
-        </el-sub-menu>
-        <el-menu-item :index="menu.key" :disabled="menu.disabled" v-else>
-          <el-icon v-if="menu?.icon">
-            <component :is="menu?.icon" />
-          </el-icon>
-          <span>{{ menu.title }}</span>
-        </el-menu-item>
-      </template>
-    </el-menu>
+          </el-menu-item>
+        </template>
+      </el-menu>
+    </el-scrollbar>
     <div class="aside-collapse" @click="() => toggleCollapse()">
       <svg
         data-v-912602da=""
@@ -192,25 +210,16 @@ onUnmounted(() => {
 .aside-container {
   position: relative;
   padding-bottom: 40px;
+  background-color: #fff;
+  height: 100%;
 }
 
-.aside-menu-vertical {
-  height: calc(100vh - 100px);
-  overflow: auto;
+.aside-menu-container {
+  border-right: 1px solid var(--el-menu-border-color);
+}
 
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #0003;
-    border-radius: 10px;
-    transition: all 0.2s ease-in-out;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 10px;
-  }
+.el-menu {
+  border-right: none;
 }
 
 .aside-collapse {

@@ -58,11 +58,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'base-form',
         name: 'base-form',
-        component: () => import('@/views/admin/TableBase.vue')
+        component: () => import('@/views/admin/FormBase.vue')
       },
       {
-        path: 'nested-form',
-        name: 'nested-form',
+        path: 'advanced-form',
+        name: 'advanced-form',
         component: () => import('@/views/admin/TableBase.vue')
       },
       {
