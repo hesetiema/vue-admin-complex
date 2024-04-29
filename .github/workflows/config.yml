@@ -24,7 +24,7 @@ jobs:
   # 单次部署的工作描述
   job:
     name: Deployment
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
@@ -33,54 +33,57 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       # setup node
       - name: Setup Node.js
-        uses: actions/setup-node@v3 
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-          
+          node-version: 20
+
       # setup pnpm
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         id: pnpm-install
         with:
-          version: 7
+          version: 8
           run_install: false
-        
+
       # cache
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-          
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      
+
       # cache fail and install dependencies
       - name: Install dependencies
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: |
           pnpm install
-          
+
       - name: Build
         run: pnpm run build
-        
+
       - name: upload production artifacts
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: dist
 
       # deploy
       - name: Deploy Page To Release
         id: deployment
-        uses: actions/deploy-pages@v1
-
-       
+        uses: actions/deploy-pages@v2
