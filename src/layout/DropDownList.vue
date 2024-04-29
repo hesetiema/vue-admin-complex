@@ -39,4 +39,16 @@ const dropdownItems = ref(props.list)
   </el-dropdown>
 </template>
 
-<style scoped></style>
+<style scoped>
+.el-dropdown {
+  &:focus-visible {
+    outline: none;
+  }
+}
+.el-dropdown-link {
+  outline: none;
+  &:focus-visible {
+    outline: none;
+  }
+}
+</style>

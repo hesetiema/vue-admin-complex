@@ -36,13 +36,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 <template>
   <div class="login-container">
     <div class="login-landing">
-      <img
-        alt="landing image"
-        class="image"
-        src="@/assets/landingPage.svg"
-        width="500"
-        height="500"
-      />
+      <img alt="landing image" class="image" src="@/assets/landingPage.svg" />
     </div>
     <div class="login-ruleForm">
       <div class="form-title">帐号登录</div>
@@ -76,15 +70,28 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 </template>
 
 <style scoped>
-
 .login-container {
   width: 100%;
-  height: calc(100vh - 48px);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  padding-inline: 2rem;
-  padding-block: 4rem;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 40px;
+}
+
+.login-landing {
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  min-width: 420px;
+  max-width: 500px;
+  object-fit: contain;
 }
 .login-ruleForm {
   display: flex;

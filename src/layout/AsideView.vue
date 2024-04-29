@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, markRaw } from 'vue'
+import { reactive, markRaw, ref, onMounted, onUnmounted } from 'vue'
 import { Histogram, Menu as IconMenu, ElementPlus, Setting } from '@element-plus/icons-vue'
 import type { ComponentPublicInstance } from 'vue'
 import { useRoute } from 'vue-router'
@@ -90,15 +90,38 @@ const menuItems: IMenuItem[] = reactive([
 ])
 
 const route = useRoute()
+const isCollapse = ref(true)
+const toggleCollapse = (flag?: boolean) => {
+  if (typeof flag === 'boolean') {
+    isCollapse.value = flag
+  } else {
+    isCollapse.value = !isCollapse.value
+  }
+}
+
+const handleEvent = (event) => {
+  if (['collapse', 'expand'].includes(event.detail)) {
+    const isCollapseEvent = event.detail === 'collapse'
+    toggleCollapse(isCollapseEvent)
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('collapse-aside-menu', handleEvent)
+})
+
+onUnmounted(() => {
+  window.addEventListener('collapse-aside-menu', handleEvent)
+})
 </script>
 
 <template>
   <div class="aside-container">
     <el-menu
       :default-active="route.name?.toString()"
+      :collapse="isCollapse"
       router
-      unique-opened
-      class="el-menu-vertical-aside"
+      class="aside-menu-vertical"
     >
       <template v-for="menu in menuItems" :key="menu.key">
         <el-sub-menu :index="menu.key" :disabled="menu.disabled" v-if="menu?.children?.length">
@@ -143,15 +166,64 @@ const route = useRoute()
         </el-menu-item>
       </template>
     </el-menu>
+    <div class="aside-collapse" @click="() => toggleCollapse()">
+      <svg
+        data-v-912602da=""
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        aria-hidden="true"
+        role="img"
+        class="ml-4 mb-1 w-[16px] h-[16px] inline-block align-middle cursor-pointer duration-[100ms] text-primary"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        :style="{ transform: isCollapse ? 'none' : `rotateY(180deg)`, outline: 'none' }"
+      >
+        <path
+          fill="currentColor"
+          d="M21 18v2H3v-2h18ZM6.95 3.55v9.9L2 8.5l4.95-4.95ZM21 11v2h-9v-2h9Zm0-7v2h-9V4h9Z"
+        ></path>
+      </svg>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .aside-container {
-  height: 100%;
+  position: relative;
+  padding-bottom: 40px;
 }
 
-.el-menu-vertical-aside {
-  height: 100%;
+.aside-menu-vertical {
+  height: calc(100vh - 100px);
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #0003;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+}
+
+.aside-collapse {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 6px -3px var(--el-color-primary);
+  border-right: 1px solid var(--el-menu-border-color);
 }
 </style>

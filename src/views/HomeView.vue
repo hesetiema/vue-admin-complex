@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
 const toHome = () => {
   router.push('/')
 }
-
 </script>
 
 <template>
@@ -62,7 +61,7 @@ nav {
   & a {
     outline: none;
     text-decoration: none;
-    color: black
+    color: black;
   }
 }
 </style>
