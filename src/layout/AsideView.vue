@@ -23,7 +23,7 @@ interface IMenuItem extends IItemBase {
 }
 
 const rawComponent = (myComponent) => markRaw(myComponent)
-const menuItems: IMenuItem[] = reactive([
+const defaultItems: IMenuItem[] = [
   {
     title: 'DashBoard',
     icon: rawComponent(Histogram),
@@ -88,7 +88,8 @@ const menuItems: IMenuItem[] = reactive([
     icon: rawComponent(Setting),
     key: 'other-func'
   }
-])
+]
+const menuItems = reactive(defaultItems)
 
 const route = useRoute()
 const isCollapse = ref(true)

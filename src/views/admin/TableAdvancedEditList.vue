@@ -20,6 +20,8 @@ type SelectionCellProps = {
   intermediate?: boolean
   onChange: (value: string) => void
   forwardRef: (el: InputInstance) => void
+  onBlur: () => void
+  onKeydownEnter: () => void
 }
 
 const InputCell: FunctionalComponent<SelectionCellProps> = ({ value, onChange, forwardRef }) => {

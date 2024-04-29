@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import DropDownList from './DropDownList.vue'
 import { useRouter } from 'vue-router'
 
