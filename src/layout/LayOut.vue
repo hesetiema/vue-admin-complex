@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import HeaderView from './HeaderView.vue'
 import AsideView from './AsideView.vue'
+import BreadCrumb from './BreadCrumb.vue'
 import { RouterView } from 'vue-router'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useCollapseStore } from '@/stores/collapse'
 
 const containerRef = ref()
 const store = useCollapseStore()
+
 const showDrawer = computed(() => store.status === 'drawer')
 const isDrawerOpen = computed(() => store.drawer)
-
 const isCollapse = computed(() => store.collapse)
 
 const handleWidthChange = (width: number) => {
@@ -93,6 +94,7 @@ onUnmounted(() => {
               'margin-left': showDrawer ? '0px' : isCollapse ? '64px' : '164px'
             }"
           >
+            <BreadCrumb />
             <RouterView></RouterView>
           </el-main>
         </el-container>

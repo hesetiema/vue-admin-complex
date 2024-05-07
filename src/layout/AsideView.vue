@@ -8,6 +8,8 @@ import { useCollapseStore } from '@/stores/collapse'
 interface IItemBase {
   title: string
   key: string
+  children?: IItemBase[]
+  index?: string
 }
 
 interface ISubMenuItem extends Partial<IItemBase> {
@@ -16,7 +18,7 @@ interface ISubMenuItem extends Partial<IItemBase> {
   icon?: ComponentPublicInstance
 }
 
-interface IMenuItem extends IItemBase {
+interface IMenuItem extends Omit<IItemBase, 'children'> {
   icon?: ComponentPublicInstance
   children?: ISubMenuItem[]
   disabled?: boolean
@@ -27,7 +29,8 @@ const defaultItems: IMenuItem[] = [
   {
     title: 'DashBoard',
     icon: rawComponent(Histogram),
-    key: 'index'
+    key: 'index',
+    index: '/admin'
   },
   {
     title: '组件',
@@ -37,30 +40,35 @@ const defaultItems: IMenuItem[] = [
       {
         groupTitle: '列表',
         children: [
-          { title: '普通列表', key: 'base-table' },
+          { title: '普通列表', key: 'base-table', index: '/admin/base-table' },
           {
             title: '高级列表',
-            key: 'advanced-table'
+            key: 'advanced-table',
+            index: '/admin/advanced-table'
           }
         ]
       },
       {
         groupTitle: '表单',
         children: [
-          { title: '普通表单', key: 'base-form' },
+          { title: '普通表单', key: 'base-form', index: '/admin/base-form' },
           {
             title: '高级表单',
-            key: 'advanced-form'
+            key: 'advanced-form',
+            children: [
+              {
+                title: '文件上传',
+                key: 'file-upload',
+                index: '/admin/advanced-form/file-upload'
+              },
+              {
+                title: '图片裁剪',
+                key: 'img-crop',
+                index: '/admin/advanced-form/img-crop'
+              }
+            ]
           }
         ]
-      },
-      {
-        title: '文件上传',
-        key: 'file-upload'
-      },
-      {
-        title: '图片裁剪',
-        key: 'img-crop'
       }
     ]
   },
@@ -71,23 +79,65 @@ const defaultItems: IMenuItem[] = [
     children: [
       {
         title: '水印',
-        key: 'watermark'
+        key: 'watermark',
+        index: '/admin/watermark'
       },
       {
         title: '音乐播放器',
-        key: 'player'
+        key: 'player',
+        index: '/admin/player'
       }
     ]
   },
   {
     title: '其他功能',
     icon: rawComponent(Setting),
-    key: 'other-func'
+    key: 'other-func',
+    index: '/admin/other-func'
   }
 ]
 const menuItems = reactive(defaultItems)
 
+const flattenTree = (root) => {
+  const flattened = []
+  const stack = [root]
+  while (stack.length > 0) {
+    const node = stack.pop()
+    if (!Array.isArray(node)) {
+      flattened.push(node)
+    }
+    for (let i = node.length - 1; i >= 0; i--) {
+      if (node[i]?.index) {
+        stack.push(node[i])
+      }
+      if (node[i]?.children?.length) {
+        stack.push(node[i]?.children)
+      }
+    }
+  }
+  return flattened
+}
+
 const route = useRoute()
+const activeIndex = computed(() => {
+  const current = route.path
+  const flattenMenus = flattenTree(defaultItems)
+  const flattenMenuPaths = flattenMenus.map((v) => v.index)
+
+  let matchedPath = current
+  if (!flattenMenuPaths.includes(current)) {
+    const matched = [...route.matched]
+    while (matched.length > 0) {
+      const node = matched.pop()
+      if (flattenMenuPaths.includes(node.path)) {
+        matchedPath = node.path
+        break
+      }
+    }
+  }
+  return matchedPath
+})
+
 const store = useCollapseStore()
 const showCollapse = computed(() => store.status === 'collapse')
 const isCollapse = computed(() => store.status === 'collapse' && store.collapse)
@@ -106,7 +156,7 @@ const toggleCollapse = () => {
       height="100%"
     >
       <el-menu
-        :default-active="route.name?.toString()"
+        :default-active="activeIndex"
         :collapse="isCollapse"
         router
         class="aside-menu-vertical"
@@ -130,21 +180,41 @@ const toggleCollapse = () => {
               <el-menu-item-group :title="submenu?.groupTitle" v-if="submenu?.groupTitle">
                 <template v-if="submenu?.children?.length">
                   <template v-for="child in submenu.children" :key="child?.key">
-                    <el-menu-item :index="child.key">{{ child.title }}</el-menu-item>
+                    <template v-if="child?.children?.length">
+                      <el-sub-menu :index="child.key">
+                        <template #title>{{ child.title }}</template>
+                        <template v-for="grandChild in child.children" :key="grandChild?.key">
+                          <el-menu-item :index="grandChild.index">{{
+                            grandChild.title
+                          }}</el-menu-item>
+                        </template>
+                      </el-sub-menu>
+                    </template>
+                    <el-menu-item v-else :index="child?.index">{{ child.title }}</el-menu-item>
                   </template>
                 </template>
-                <el-menu-item :index="submenu.key" v-else>{{ submenu.title }}</el-menu-item>
+                <el-menu-item :index="submenu.index" v-else>{{ submenu.title }}</el-menu-item>
               </el-menu-item-group>
 
-              <el-sub-menu :index="submenu?.key" v-else-if="submenu?.children?.length">
+              <el-sub-menu :index="submenu.key" v-else-if="submenu?.children?.length">
                 <template #title>{{ submenu?.title }}</template>
 
                 <template v-for="child in submenu.children" :key="child?.key">
-                  <el-menu-item :index="child.key">{{ child.title }}</el-menu-item>
+                  <template v-if="child?.children?.length">
+                    <el-sub-menu :index="child.key">
+                      <template #title>{{ child.title }}</template>
+                      <template v-for="grandChild in child.children" :key="grandChild?.key">
+                        <el-menu-item :index="grandChild.index">{{
+                          grandChild.title
+                        }}</el-menu-item>
+                      </template>
+                    </el-sub-menu>
+                  </template>
+                  <el-menu-item v-else :index="child.index">{{ child.title }}</el-menu-item>
                 </template>
               </el-sub-menu>
 
-              <el-menu-item :index="submenu?.key" v-else>
+              <el-menu-item :index="submenu?.index" v-else>
                 <el-icon v-if="submenu?.icon">
                   <component :is="submenu?.icon" />
                 </el-icon>
@@ -152,7 +222,7 @@ const toggleCollapse = () => {
               </el-menu-item>
             </template>
           </el-sub-menu>
-          <el-menu-item :index="menu.key" :disabled="menu.disabled" v-else>
+          <el-menu-item :index="menu.index" :disabled="menu.disabled" v-else>
             <el-icon v-if="menu?.icon">
               <component :is="menu?.icon" />
             </el-icon>
