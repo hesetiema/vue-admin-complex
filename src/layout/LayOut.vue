@@ -2,10 +2,15 @@
 import HeaderView from './HeaderView.vue'
 import AsideView from './AsideView.vue'
 import { RouterView } from 'vue-router'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useCollapseStore } from '@/stores/collapse'
 
 const containerRef = ref()
+const store = useCollapseStore()
+const showDrawer = computed(() => store.status === 'drawer')
+const isDrawerOpen = computed(() => store.drawer)
+
+const isCollapse = computed(() => store.collapse)
 
 const handleWidthChange = (width: number) => {
   /**
@@ -14,23 +19,14 @@ const handleWidthChange = (width: number) => {
    * width > 990 展开侧边栏
    */
   if (width > 0 && width <= 760) {
-    window.dispatchEvent(
-      new CustomEvent('collapse-aside-menu', {
-        detail: 'hide'
-      })
-    )
+    store.setStatus('drawer')
+    store.closeDrawer()
   } else if (width > 760 && width <= 990) {
-    window.dispatchEvent(
-      new CustomEvent('collapse-aside-menu', {
-        detail: 'collapse'
-      })
-    )
+    store.setStatus('collapse')
+    store.switch(true)
   } else {
-    window.dispatchEvent(
-      new CustomEvent('collapse-aside-menu', {
-        detail: 'expand'
-      })
-    )
+    store.setStatus('collapse')
+    store.switch(false)
   }
 }
 const resizeObserver = new ResizeObserver((entries) => {
@@ -66,8 +62,6 @@ onUnmounted(() => {
     resizeObserver.unobserve(containerRef.value)
   }
 })
-
-const store = useCollapseStore()
 </script>
 
 <template>
@@ -79,10 +73,26 @@ const store = useCollapseStore()
 
       <el-scrollbar height="100%">
         <el-container>
-          <el-aside :style="{ width: store.collapse ? '64px' : '164px' }">
+          <el-drawer
+            v-if="showDrawer"
+            v-model="isDrawerOpen"
+            direction="ltr"
+            size="164"
+            :with-header="false"
+            @open="store.openDrawer"
+            @close="store.closeDrawer"
+            class="aside-drawer"
+          >
+            <AsideView />
+          </el-drawer>
+          <el-aside v-else :style="{ width: isCollapse ? '64px' : '164px' }">
             <AsideView />
           </el-aside>
-          <el-main :style="{ 'margin-left': store.collapse ? '64px' : '164px' }">
+          <el-main
+            :style="{
+              'margin-left': showDrawer ? '0px' : isCollapse ? '64px' : '164px'
+            }"
+          >
             <RouterView></RouterView>
           </el-main>
         </el-container>
@@ -118,5 +128,9 @@ const store = useCollapseStore()
   left: 0;
   top: 60px;
   bottom: 0;
+}
+
+:deep(.el-drawer__body) {
+  padding: 0;
 }
 </style>

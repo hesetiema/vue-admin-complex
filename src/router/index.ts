@@ -71,11 +71,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/TableBase.vue')
       },
       {
-        path: 'text-ellipsis',
-        name: 'text-ellipsis',
-        component: () => import('@/views/admin/TableBase.vue')
-      },
-      {
         path: 'img-crop',
         name: 'img-crop',
         component: () => import('@/views/admin/TableBase.vue')
