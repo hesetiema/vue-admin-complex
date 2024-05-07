@@ -75,7 +75,7 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'index',
-            name: 'index',
+            name: 'base-form-index',
             component: () => import('@/views/admin/FormBase.vue')
           },
           {
