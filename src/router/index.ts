@@ -68,14 +68,19 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'base-form',
         name: 'base-form',
-        component: () => import('@/views/admin/FormBase.vue'),
         meta: {
           title: '普通表单'
         },
+        redirect: '/admin/base-form/index',
         children: [
           {
-            path: 'text-ellipse',
-            name: 'text-ellipse',
+            path: 'index',
+            name: 'index',
+            component: () => import('@/views/admin/FormBase.vue')
+          },
+          {
+            path: 'text-ellipsis',
+            name: 'text-ellipsis',
             component: () => import('@/views/admin/TableBase.vue'),
             meta: {
               title: '文本省略'
