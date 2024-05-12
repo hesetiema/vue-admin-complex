@@ -7,10 +7,10 @@ import { RouterView } from 'vue-router'
     <div class="intro">
       <div>高级表单涉及的主要组件有：</div>
       <ul>
-        <li>单行输入框</li>
-        <li>下拉选择框</li>
-        <li>日期时间选择框</li>
-        <li>切换、多选、单选、多行文本</li>
+        <li>弹出层表单</li>
+        <li>搜索表单</li>
+        <li>分步表单</li>
+        <li>动态增减嵌套表单与依赖联动</li>
       </ul>
     </div>
     <RouterView></RouterView>

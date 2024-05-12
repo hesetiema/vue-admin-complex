@@ -77,14 +77,6 @@ const routes: RouteRecordRaw[] = [
             path: 'index',
             name: 'base-form-index',
             component: () => import('@/views/admin/FormBase.vue')
-          },
-          {
-            path: 'text-ellipsis',
-            name: 'text-ellipsis',
-            component: () => import('@/views/admin/TableBase.vue'),
-            meta: {
-              title: '文本省略'
-            }
           }
         ]
       },
@@ -98,22 +90,54 @@ const routes: RouteRecordRaw[] = [
         },
         children: [
           {
-            path: 'file-upload',
-            name: 'file-upload',
-            component: () => import('@/views/admin/TableBase.vue'),
+            path: 'modal',
+            name: 'modal',
+            component: () => import('@/views/admin/FormAdvancedModal.vue'),
             meta: {
-              title: '文件上传'
+              title: '弹出层表单'
             }
           },
           {
-            path: 'img-crop',
-            name: 'img-crop',
-            component: () => import('@/views/admin/TableBase.vue'),
+            path: 'search',
+            name: 'search',
+            component: () => import('@/views/admin/FormAdvancedSearch.vue'),
             meta: {
-              title: '图片裁剪'
+              title: '搜索表单'
+            }
+          },
+          {
+            path: 'step',
+            name: 'step',
+            component: () => import('@/views/admin/FormAdvancedModal.vue'),
+            meta: {
+              title: '分步表单'
+            }
+          },
+          {
+            path: 'dynamic',
+            name: 'dynamic',
+            component: () => import('@/views/admin/FormAdvancedModal.vue'),
+            meta: {
+              title: '动态增减嵌套表单'
             }
           }
         ]
+      },
+      {
+        path: 'file-upload',
+        name: 'file-upload',
+        component: () => import('@/views/admin/TableBase.vue'),
+        meta: {
+          title: '文件上传'
+        }
+      },
+      {
+        path: 'img-crop',
+        name: 'img-crop',
+        component: () => import('@/views/admin/TableBase.vue'),
+        meta: {
+          title: '图片裁剪'
+        }
       },
       {
         path: 'watermark',

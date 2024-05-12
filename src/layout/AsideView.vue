@@ -57,14 +57,14 @@ const defaultItems: IMenuItem[] = [
             key: 'advanced-form',
             children: [
               {
-                title: '文件上传',
-                key: 'file-upload',
-                index: '/admin/advanced-form/file-upload'
+                title: '弹出层表单',
+                key: 'modal',
+                index: '/admin/advanced-form/modal'
               },
               {
-                title: '图片裁剪',
-                key: 'img-crop',
-                index: '/admin/advanced-form/img-crop'
+                title: '搜索表单',
+                key: 'search',
+                index: '/admin/advanced-form/search'
               }
             ]
           }
@@ -77,6 +77,16 @@ const defaultItems: IMenuItem[] = [
     icon: rawComponent(IconMenu),
     key: '2',
     children: [
+      {
+        title: '文件上传',
+        key: 'file-upload',
+        index: '/admin/file-upload'
+      },
+      {
+        title: '图片裁剪',
+        key: 'img-crop',
+        index: '/admin/img-crop'
+      },
       {
         title: '水印',
         key: 'watermark',
