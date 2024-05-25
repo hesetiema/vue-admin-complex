@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 
+import { ElNotification } from 'element-plus'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -170,6 +172,40 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+const checkUpdate = async () => {
+  return fetch(`/version.json?t=${Date.now()}`)
+    .then((response) => {
+      if (!response.ok) throw new Error(`Failed to fetch version.json`)
+
+      try {
+        const serverJson = response.json()
+        return serverJson
+      } catch (error) {
+        throw new Error(`Failed to parse version.json`)
+      }
+    })
+    .then((res) => {
+      const htmlLastBuildTime = (document.querySelector('meta[name=lastBuildTime]') as any)?.content
+      if (res?.lastBuildTime && res?.lastBuildTime !== htmlLastBuildTime) {
+        ElNotification({
+          title: '系统更新',
+          message: `检测到当前系统版本已更新，即将刷新页面！`
+        })
+        window.location.reload()
+      }
+    })
+}
+
+router.beforeEach((to, from, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    checkUpdate().then(() => {
+      next()
+    })
+  } else {
+    next()
+  }
 })
 
 export default router
