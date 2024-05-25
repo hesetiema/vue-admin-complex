@@ -73,7 +73,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 .login-container {
   width: 100%;
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
   flex-wrap: wrap;
   gap: 20px;
@@ -100,6 +99,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   width: 420px;
   height: auto;
   padding: 40px;
+  margin: auto 0;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
