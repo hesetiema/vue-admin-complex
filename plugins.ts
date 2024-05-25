@@ -30,7 +30,7 @@ export default function vitePluginUpdateVersion(): PluginOption {
         name: undefined,
         source: jsonContent,
         fileName: `version.json`,
-        needsCodeReference: false
+        needsCodeReference: true
       }
     },
 
