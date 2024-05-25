@@ -193,7 +193,7 @@ const checkUpdate = async () => {
       if (res?.lastBuildTime && res?.lastBuildTime !== htmlLastBuildTime) {
         ElNotification({
           title: '系统更新',
-          message: `检测到当前系统版本已更新，即将刷新页面！`
+          message: `请注意，检测到当前系统版本已更新，即将刷新页面！`
         })
         window.location.reload()
       }
