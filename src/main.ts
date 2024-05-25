@@ -17,6 +17,10 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload() // for example, refresh the page
+})
+
 app.use(router)
 app.use(ElementPlus)
 app.use(pinia)

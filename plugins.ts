@@ -1,5 +1,6 @@
 import type { PluginOption } from 'vite'
 import fs from 'fs'
+import path from 'path'
 
 export default function vitePluginUpdateVersion(): PluginOption {
   let config: any, lastBuildTime: string
@@ -15,9 +16,10 @@ export default function vitePluginUpdateVersion(): PluginOption {
       config = resolvedConfig
     },
 
-    buildEnd() {
+    buildStart() {
       lastBuildTime = new Date().toLocaleString()
-      fs.writeFileSync('public/version.json', JSON.stringify({ lastBuildTime }, null, 2))
+      const filePath = config.publicDir + path.sep + 'version.json'
+      fs.writeFileSync(filePath, JSON.stringify({ lastBuildTime }, null, 2))
     },
 
     transformIndexHtml(html) {
