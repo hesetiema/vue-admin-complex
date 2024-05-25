@@ -208,4 +208,24 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+window.addEventListener(
+  'error',
+  function (e) {
+    if (e.target) {
+      checkUpdate()
+    }
+  },
+  true
+)
+
+window.addEventListener(
+  'unhandledrejection',
+  function (e) {
+    if (e.target) {
+      checkUpdate()
+    }
+  },
+  true
+)
+
 export default router
