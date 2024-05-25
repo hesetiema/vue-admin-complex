@@ -175,7 +175,7 @@ const router = createRouter({
 })
 
 const checkUpdate = async () => {
-  return fetch(`version.json?t=${Date.now()}`)
+  return fetch(`/version.json?t=${Date.now()}`)
     .then((response) => {
       if (!response.ok) throw new Error(`Failed to fetch version.json`)
 
