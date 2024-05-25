@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 
+import { VITE_BASE_PATH } from '@/constant/index'
+
 import { ElNotification } from 'element-plus'
 
 const routes: RouteRecordRaw[] = [
@@ -175,7 +177,7 @@ const router = createRouter({
 })
 
 const checkUpdate = async () => {
-  return fetch(`/version.json?t=${Date.now()}`)
+  return fetch(`${VITE_BASE_PATH}/version.json?t=${Date.now()}`)
     .then((response) => {
       if (!response.ok) throw new Error(`Failed to fetch version.json`)
 

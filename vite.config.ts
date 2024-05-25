@@ -4,12 +4,11 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vitePluginUpdateVersion from './plugins'
-
-const prod = process.env.NODE_ENV === 'production'
+import { VITE_BASE_PATH } from './src/constant/index'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: prod ? '/vue-admin-complex/' : '/vue-admin-complex/',
+  base: VITE_BASE_PATH,
   plugins: [vue(), vueJsx(), vitePluginUpdateVersion()],
   resolve: {
     alias: {
