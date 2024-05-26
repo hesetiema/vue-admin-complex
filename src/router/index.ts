@@ -112,15 +112,15 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'step',
             name: 'step',
-            component: () => import('@/views/admin/FormAdvancedModal.vue'),
+            component: () => import('@/views/admin/FormAdvancedStep.vue'),
             meta: {
               title: '分步表单'
             }
           },
           {
-            path: 'dynamic',
-            name: 'dynamic',
-            component: () => import('@/views/admin/FormAdvancedModal.vue'),
+            path: 'nest',
+            name: 'nest',
+            component: () => import('@/views/admin/FormAdvancedNest.vue'),
             meta: {
               title: '动态增减嵌套表单'
             }

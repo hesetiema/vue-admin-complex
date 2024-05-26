@@ -65,6 +65,16 @@ const defaultItems: IMenuItem[] = [
                 title: '搜索表单',
                 key: 'search',
                 index: '/admin/advanced-form/search'
+              },
+              {
+                title: '分步表单',
+                key: 'step',
+                index: '/admin/advanced-form/step'
+              },
+              {
+                title: '嵌套表单',
+                key: 'nest',
+                index: '/admin/advanced-form/nest'
               }
             ]
           }
