@@ -154,7 +154,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'player',
         name: 'player',
-        component: () => import('@/views/admin/TableBase.vue'),
+        component: () => import('@/views/admin/MusicPlayer.vue'),
         meta: {
           title: '音乐播放器'
         }
