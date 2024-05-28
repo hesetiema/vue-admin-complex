@@ -24,7 +24,9 @@ const handleFiles = (event) => {
     const file = files[0]
     const reader = new FileReader()
     reader.onload = () => {
-      audioRef.value.src = reader.result
+      if (typeof reader.result === 'string') {
+        audioRef.value.src = reader.result
+      }
     }
 
     if (file) {
@@ -34,7 +36,7 @@ const handleFiles = (event) => {
 }
 
 function onLoadAudio() {
-  const context = new (window.AudioContext || window.webkitAudioContext)()
+  const context = new window.AudioContext()
   const analyser = context.createAnalyser()
   analyser.fftSize = 512
   const source = context.createMediaElementSource(audioRef.value)
