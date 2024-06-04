@@ -130,7 +130,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'file-upload',
         name: 'file-upload',
-        component: () => import('@/views/admin/TableBase.vue'),
+        component: () => import('@/views/admin/UploadFiles.vue'),
         meta: {
           title: '文件上传'
         }
